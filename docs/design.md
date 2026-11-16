@@ -50,7 +50,7 @@ The width axis does the work a second typeface would:
 
 ## Layout
 
-Left-aligned throughout. The header row spans the page: the title on the left, Contact on the right. Landing is the Categories page. In that grid the incident count is the left column, and rows are sorted by that count, so a name that appears often ranks above a name that merely spans many kinds. The squares stay 20px and the grid scrolls sideways on a narrow window.
+Left-aligned throughout. The header row spans the page: the title on the left, Contact on the right. Landing is the Categories page. On the right of that grid, the incident count sits immediately left of Kinds. Rows are sorted by the incident count, so a name that appears often ranks above a name that merely spans many kinds. The squares stay 20px and the grid scrolls sideways on a narrow window.
 
 ```
 Bangladesh Football Archive
@@ -61,9 +61,9 @@ Categories    Connections    Incidents    About   (text tabs, the current one un
 
 [ People | Teams | Organisations | Tournaments ]   At least [3] kinds
 
-                  Incidents   On the pitch   Conduct   ...
-Kazi Salahuddin          83   ■ ■ ■ ■ ...
-Mamunul Islam            31   ■ ■ □ ■ ...
+             On the pitch   Conduct   ...          Incidents   Kinds
+Kazi Salahuddin   ■ ■ ■ ■ ...                 83        11
+Mamunul Islam     ■ ■ □ ■ ...                 31        12
 ...
 ```
 

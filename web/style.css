@@ -214,27 +214,17 @@ input[type="search"] { width: 12rem; }
 
 .matrix .group-start { padding-left: 10px; }
 
-.matrix .lead {
+.matrix .name {
   position: sticky;
   left: 0;
   z-index: 1;
-  display: grid;
-  grid-template-columns: 13rem 3.25rem;
-  align-items: center;
-  column-gap: 12px;
   background: var(--paper);
   text-align: left;
   font-weight: 500;
-  padding-right: 16px;
+  padding-right: 12px;
 }
 
-.matrix thead .lead {
-  display: table-cell;
-  vertical-align: bottom;
-  text-align: right;
-}
-
-.matrix .lead button[data-open] {
+.matrix .name button {
   display: block;
   max-width: 13rem;
   overflow: hidden;
@@ -247,13 +237,9 @@ input[type="search"] { width: 12rem; }
   cursor: pointer;
 }
 
-.matrix .lead button[data-open]:hover,
-.matrix tr.on .lead button[data-open] { text-decoration: underline; text-underline-offset: 3px; }
+.matrix .name button:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-.matrix .count {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
+.matrix tr.on .name button { text-decoration: underline; text-underline-offset: 3px; }
 
 .matrix .num {
   text-align: right;
@@ -402,8 +388,7 @@ input[type="search"] { width: 12rem; }
   }
   .panel-open { overflow: hidden; }
   h1 { font-size: 28px; line-height: 32px; }
-  .matrix .lead { grid-template-columns: 8rem 2.5rem; column-gap: 8px; }
-  .matrix .lead button[data-open] { max-width: 8rem; }
+  .matrix .name button { max-width: 8rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

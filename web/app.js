@@ -105,18 +105,19 @@
     const groupStart = (c) => c > 0 && CATS[c].group !== CATS[c - 1].group;
     const colClass = (c) => [groupStart(c) ? "group-start" : "", c === OTHER ? "other-col" : ""].join(" ");
 
-    let head = `<thead><tr><th class="lead" scope="col"><button type="button" class="sort" data-sort="count" aria-pressed="${state.sort === "count"}">Incidents</button></th>`;
+    let head = `<thead><tr><th class="name"></th>`;
     CATS.forEach((cat, c) => {
       head += `<th class="${colClass(c)}" scope="col"><span class="col" data-col="${c}">${esc(cat.label)}</span></th>`;
     });
     head +=
+      `<th class="num" scope="col"><button type="button" class="sort" data-sort="count" aria-pressed="${state.sort === "count"}">Incidents</button></th>` +
       `<th class="num" scope="col"><button type="button" class="sort" data-sort="kinds" aria-pressed="${state.sort === "kinds"}">Kinds</button></th>` +
       `</tr></thead>`;
 
     let body = "<tbody>";
     for (const i of rows) {
       const e = ENTS[i];
-      body += `<tr data-row="${i}"><th class="lead" scope="row"><button type="button" data-open="${i}" title="${esc(e.label)}">${esc(e.label)}</button><span class="count">${e.incidents.length}</span></th>`;
+      body += `<tr data-row="${i}"><th class="name" scope="row"><button type="button" data-open="${i}" title="${esc(e.label)}">${esc(e.label)}</button></th>`;
       CATS.forEach((cat, c) => {
         const n = e.cats[c] || 0;
         body += `<td class="${colClass(c)}">`;
@@ -125,7 +126,7 @@
           : `<span class="dot"></span>`;
         body += "</td>";
       });
-      body += `<td class="num">${e.kinds}</td></tr>`;
+      body += `<td class="num">${e.incidents.length}</td><td class="num">${e.kinds}</td></tr>`;
     }
     body += "</tbody>";
     table.innerHTML = head + body;
