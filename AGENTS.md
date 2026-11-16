@@ -6,7 +6,7 @@ Read this first, then `docs/project-context.md` (what the project is and its rul
 
 - **Data.** The current export is `data/export/archive_export-v2.1.json` (608 incidents, 716 entities). It is a relabel-only update of v2, checked: the same incident IDs and post lists, three new categories, `broadcast_blackout` renamed to `broadcast_coverage`, and duplicate entities merged. v1 and v2 are kept for comparison. The raw Facebook pages in `data/raw/` are not in git.
 - **Web view.** Done and working: a category matrix (main view), an entity side panel, a co-appearance network, and a searchable incident list. Every number clicks through to incidents and then to Facebook posts.
-- **Owner feedback so far.** The owner wants it minimal, with nothing flashy and no "AI slop" look. The name dropdown and label overlaps were fixed after the owner's review. The header now carries a Bangla and English allegation disclaimer, there is an About tab written in Bangla, and Contact opens a GitHub issue. Hosting is Vercel, configured by `vercel.json` to serve `web/` with no build.
+- **Owner feedback so far.** The owner wants it minimal, with nothing flashy and no "AI slop" look. The name dropdown and label overlaps were fixed after the owner's review. The header now carries a Bangla and English allegation disclaimer, there is an About tab written in Bangla, and Contact opens a message to aayan.deb@outlook.com. Hosting is Vercel, configured by `vercel.json` to serve `web/` with no build.
 
 ## How to run
 
