@@ -305,6 +305,8 @@ input[type="search"] { width: 12rem; }
 
 /* Incidents */
 
+#view-incidents { max-width: 40rem; }
+
 .incidents { display: grid; gap: 24px; }
 
 .incident { display: grid; gap: 4px; }

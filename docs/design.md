@@ -50,14 +50,14 @@ The width axis does the work a second typeface would:
 
 ## Layout
 
-Left-aligned throughout. The header row spans the page: the title on the left, Contact on the right. The category matrix stays a fixed grid of 20px squares and scrolls sideways on a narrow window. It does not grow to fill a wide window.
+Left-aligned throughout. The header row spans the page: the title on the left, Contact on the right. Landing is the Incidents list, a left column about 40rem wide, and Incidents is the first tab. The category matrix stays a fixed grid of 20px squares and scrolls sideways on a narrow window. It does not grow to fill a wide window.
 
 ```
 Bangladesh Football Archive
 One sentence on what this is. The allegation note, in Quiet.
 v2, generated 16 Nov 2026, 608 incidents from 3,397 posts.
 
-Categories    Connections    Incidents          (text tabs, the current one underlined)
+Incidents    Categories    Connections    About   (text tabs, the current one underlined)
 
 [ People | Teams | Organisations | Tournaments ]   At least [3] kinds
 

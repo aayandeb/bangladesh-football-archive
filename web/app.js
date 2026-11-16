@@ -25,7 +25,7 @@
   }
 
   const state = {
-    view: "categories",
+    view: "incidents",
     type: "person",
     minKinds: 3,
     sort: "kinds",
@@ -672,7 +672,7 @@
 
   function route() {
     const [view, slug] = location.hash.slice(1).split("/");
-    showView(VIEWS.includes(view) ? view : "categories");
+    showView(VIEWS.includes(view) ? view : "incidents");
     const i = slug ? bySlug.get(slug) : undefined;
     if (i !== undefined) {
       if (i !== state.entity) {
