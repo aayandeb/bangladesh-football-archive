@@ -69,7 +69,7 @@ This is the evidence trail. It opens from every other view.
 ### 3. Co-appearance network
 
 - Built with [force-graph](https://github.com/vasturiano/force-graph) from a CDN.
-- Defaults: at least 2 shared incidents, BFF and the national team hidden but available behind a toggle, and labels shown only for larger nodes and the hovered node's neighbours.
+- Defaults: at least 3 shared incidents, BFF and the national team hidden but available behind a toggle, and labels shown only for larger nodes and the hovered node's strongest connections.
 - Colour shows entity type (person, team, organisation, tournament, other). Size shows the number of categories spanned, not raw incident count, so the syndicate signal is what stands out.
 - Edge thickness shows the number of shared incidents.
 - Controls: minimum-shared-incidents slider, entity type checkboxes, category filter (keep only edges whose shared incidents include the chosen categories), and a search box.
@@ -119,10 +119,10 @@ The build stops if any of these fail:
 | Phase | Work | Done when | Rough agent budget |
 |---|---|---|---|
 | 0 | Repo structure, git, this plan | Committed | Done |
-| 1 | Settle the visual direction: two quick static mockups of the span matrix with the real top 15 people, in clearly different styles | Owner picks one or asks for changes | 40k–80k tokens |
-| 2 | `validate_export.py` and `build_web_data.py` | Validation passes, or prints a short list of issues, and `web/data/` is generated | 60k–120k tokens |
-| 3 | Span matrix and entity profile | Owner can go from a name to its incidents to the Facebook posts in two clicks | 100k–200k tokens |
-| 4 | Co-appearance network | Default view is readable without adjusting controls, and clicking a node opens the profile | 100k–200k tokens |
+| 1 | Settle the visual direction | Owner chose a minimal direction; rules are in `docs/design.md` | Done |
+| 2 | `validate_export.py` and `build_web_data.py` | Validation passes, or prints a short list of issues, and `web/data/` is generated | Done |
+| 3 | Span matrix and entity profile, plus a searchable incident list | Owner can go from a name to its incidents to the Facebook posts in two clicks | Done, awaiting owner review |
+| 4 | Co-appearance network | Default view is readable without adjusting controls, and clicking a node opens the profile | Done, awaiting owner review. The default is 3 shared incidents rather than 2, which gives 117 names instead of 218 |
 | 5 | Review with owner, polish, optional timeline, optional GitHub Pages | Owner signs off | Varies |
 
 Budgets assume the agent inspects the export only through small Python snippets and never opens an export file directly.

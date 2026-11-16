@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bangladesh Football Archive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wdth,wght@75..125,100..800&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="layout">
+    <main id="main">
+      <header class="intro">
+        <h1>Bangladesh Football Archive</h1>
+        <p>Controversies in Bangladesh football from 2014 to 2021, gathered from posts in the fan group Bangladesh Football – Walking Around The Dreams.</p>
+        <p class="quiet">Each incident records what fans alleged, with links to their posts. None of it is a finding of fact.</p>
+        <p class="quiet small" id="meta"></p>
+      </header>
+
+      <nav class="tabs" aria-label="Views">
+        <a href="#categories" data-view="categories">Categories</a>
+        <a href="#connections" data-view="connections">Connections</a>
+        <a href="#incidents" data-view="incidents">Incidents</a>
+      </nav>
+
+      <section id="view-categories" class="view" aria-labelledby="matrix-heading">
+        <h2 id="matrix-heading"></h2>
+        <p class="quiet prose">Each row is a name and each column a kind of incident. A darker square means more incidents. Rows are sorted by how many kinds a name appears in, not counting Other.</p>
+        <div class="controls">
+          <div class="choice" role="group" aria-label="Show">
+            <button type="button" data-type="person">People</button>
+            <button type="button" data-type="team">Teams</button>
+            <button type="button" data-type="organization">Organisations</button>
+            <button type="button" data-type="tournament">Tournaments</button>
+          </div>
+          <label>At least
+            <select id="min-kinds"></select>
+            kinds
+          </label>
+        </div>
+        <p class="status small" id="matrix-status"></p>
+        <div class="matrix-scroll">
+          <table class="matrix" id="matrix"></table>
+        </div>
+        <p class="legend small quiet" id="matrix-legend"></p>
+      </section>
+
+      <section id="view-connections" class="view" aria-labelledby="net-heading" hidden>
+        <h2 id="net-heading">Who appears together</h2>
+        <p class="quiet prose">Names are joined when they appear in the same incidents. Thicker lines mean more shared incidents, and larger circles mean a name appears in more kinds of incident. Click a name to read its incidents.</p>
+        <div class="controls">
+          <label>At least
+            <select id="min-shared">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3" selected>3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+            shared incidents
+          </label>
+          <label>Kind
+            <select id="net-cat"><option value="">All kinds</option></select>
+          </label>
+          <label class="check"><input type="checkbox" id="net-hubs"> Include the federation and the national team</label>
+          <label>Find
+            <input type="search" id="net-find" list="net-names" placeholder="A name" autocomplete="off">
+            <datalist id="net-names"></datalist>
+          </label>
+        </div>
+        <p class="legend small quiet">
+          <svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="5" class="key-person"/></svg> People
+          <svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="5" class="key-team"/></svg> Teams
+          <svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="4.4" class="key-org"/></svg> Organisations and tournaments
+          <span id="net-count"></span>
+        </p>
+        <div class="network" id="network"></div>
+      </section>
+
+      <section id="view-incidents" class="view" aria-labelledby="inc-heading" hidden>
+        <h2 id="inc-heading"></h2>
+        <div class="controls">
+          <label>Search
+            <input type="search" id="inc-q" placeholder="Title or summary" autocomplete="off">
+          </label>
+          <label>Kind
+            <select id="inc-cat"><option value="">All kinds</option></select>
+          </label>
+          <label>Year
+            <select id="inc-year"><option value="">All years</option></select>
+          </label>
+        </div>
+        <div id="inc-list" class="incidents"></div>
+        <button type="button" class="more" id="inc-more" hidden>Show 50 more</button>
+      </section>
+    </main>
+
+    <aside id="panel" class="panel" aria-labelledby="panel-name" hidden></aside>
+  </div>
+
+  <script src="vendor/force-graph.min.js"></script>
+  <script src="data/archive.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
