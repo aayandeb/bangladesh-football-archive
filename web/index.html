@@ -26,15 +26,15 @@
       </header>
 
       <nav class="tabs" aria-label="Views">
-        <a href="#incidents" data-view="incidents">Incidents</a>
         <a href="#categories" data-view="categories">Categories</a>
         <a href="#connections" data-view="connections">Connections</a>
+        <a href="#incidents" data-view="incidents">Incidents</a>
         <a href="#about" data-view="about">About</a>
       </nav>
 
-      <section id="view-categories" class="view" aria-labelledby="matrix-heading" hidden>
+      <section id="view-categories" class="view" aria-labelledby="matrix-heading">
         <h2 id="matrix-heading"></h2>
-        <p class="quiet prose">Each row is a name and each column a kind of incident. A darker square means more incidents. Rows are sorted by how many kinds a name appears in, not counting Other.</p>
+        <p class="quiet prose">Each row is a name and each column a kind of incident. A darker square means more incidents of that kind. Rows are sorted by the incident count, the column on the left.</p>
         <div class="controls">
           <div class="choice" role="group" aria-label="Show">
             <button type="button" data-type="person">People</button>
@@ -90,7 +90,7 @@
         <div class="network" id="network"></div>
       </section>
 
-      <section id="view-incidents" class="view" aria-labelledby="inc-heading">
+      <section id="view-incidents" class="view" aria-labelledby="inc-heading" hidden>
         <h2 id="inc-heading"></h2>
         <div class="controls">
           <label>Search

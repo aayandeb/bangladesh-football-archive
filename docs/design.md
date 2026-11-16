@@ -50,21 +50,20 @@ The width axis does the work a second typeface would:
 
 ## Layout
 
-Left-aligned throughout. The header row spans the page: the title on the left, Contact on the right. Landing is the Incidents list, a left column about 40rem wide, and Incidents is the first tab. The category matrix stays a fixed grid of 20px squares and scrolls sideways on a narrow window. It does not grow to fill a wide window.
+Left-aligned throughout. The header row spans the page: the title on the left, Contact on the right. Landing is the Categories page. In that grid the incident count is the left column, and rows are sorted by that count, so a name that appears often ranks above a name that merely spans many kinds. The squares stay 20px and the grid scrolls sideways on a narrow window.
 
 ```
 Bangladesh Football Archive
 One sentence on what this is. The allegation note, in Quiet.
 v2, generated 16 Nov 2026, 608 incidents from 3,397 posts.
 
-Incidents    Categories    Connections    About   (text tabs, the current one underlined)
+Categories    Connections    Incidents    About   (text tabs, the current one underlined)
 
 [ People | Teams | Organisations | Tournaments ]   At least [3] kinds
 
-             On the pitch        Conduct   Governance   Clubs ...
-             | | | | | |         | | |     | | |        | | | ...   (vertical column names)
-Mamunul Islam ■ ■ □ ■ ...                                      12   31
-Jamal Bhuyan  ■ □ ■ ■ ...                                      12   30
+                  Incidents   On the pitch   Conduct   ...
+Kazi Salahuddin          83   ■ ■ ■ ■ ...
+Mamunul Islam            31   ■ ■ □ ■ ...
 ...
 ```
 
