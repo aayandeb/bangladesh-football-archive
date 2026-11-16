@@ -50,7 +50,7 @@ The width axis does the work a second typeface would:
 
 ## Layout
 
-Left-aligned throughout. Text, the matrix, and the network all use the width of the page, so a wide window does not leave an empty margin on the right. The header row spans that width: the title on the left, Contact on the right. Matrix squares grow together to fill the width, stay square, and never go below 20px. A narrow window scrolls the matrix sideways instead of shrinking the squares.
+Left-aligned throughout. The header row spans the page: the title on the left, Contact on the right. The category matrix stays a fixed grid of 20px squares and scrolls sideways on a narrow window. It does not grow to fill a wide window.
 
 ```
 Bangladesh Football Archive
@@ -94,7 +94,7 @@ The entity panel opens on the right as a 30rem column and pushes the main view t
 
 - **Tabs.** Plain text with the current tab underlined in Ink. No pills or backgrounds.
 - **Filter buttons.** Text in a 1px Line outline. The selected button is Ink with Paper text. Square corners at 2px radius. All controls share the same height (32px).
-- **Matrix cell.** A square, at least 20px, that grows so the grid fills the page. 2px gap, no border. Empty cells are a neutral square (`#F2F5F4`), lighter than a single incident, so the grid still reads as a grid when the squares are large. Category groups are separated by a 10px gap instead of group labels. Hover or focus outlines the cell in Ink and shows the count and category in a single status line under the controls, not a floating tooltip. The Other column is drawn at reduced opacity.
+- **Matrix cell.** A 20px square with a 2px gap and no border. Empty cells are a small Line dot, so the grid stays readable without rules. Category groups are separated by a 10px gap instead of group labels. Hover or focus outlines the cell in Ink and shows the count and category in a single status line under the controls, not a floating tooltip. The Other column is drawn at reduced opacity.
 - **Incident.** No box, no card. Date in Quiet, title in body weight 600, summary, then one Quiet line with categories and names. Incidents are separated by space (24px), not lines.
 - **Links.** Ink, underlined with a 1px underline offset by 3px. Facebook links read "Facebook posts: 1, 2, 3", each with an accessible label such as "Facebook post 2 of 3", and open in a new tab.
 - **Network.** People are filled Field circles. Teams are filled Quiet circles. Organisations and tournaments are Quiet outlined circles. Circle size follows the number of kinds an entity spans. Links are faint Quiet lines, with thickness following shared incidents. Defaults: at least 3 shared incidents, with the federation and national team hidden. Only the 14 names spanning the most kinds are labelled until you zoom in. Hovering or selecting a name fades everything else and labels it plus its 10 strongest connections. Labels are drawn after all circles, with a Paper halo, so nothing covers them.
