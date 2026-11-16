@@ -45,7 +45,6 @@ button, select, input { font: inherit; color: inherit; }
 
 .quiet { color: var(--quiet); }
 .small { font-size: 13px; line-height: 18px; }
-.prose { max-width: 38rem; }
 
 .layout {
   display: grid;
@@ -60,7 +59,7 @@ main {
   min-width: 0;
 }
 
-.intro { max-width: 40rem; display: grid; gap: 8px; }
+.intro { display: grid; gap: 8px; }
 .intro-row { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px 24px; }
 .intro h1 { margin-bottom: 8px; }
 
@@ -72,7 +71,6 @@ main {
   border-top: 1px solid var(--line);
 }
 
-.about { max-width: 38rem; }
 .about .prose { display: grid; gap: 16px; }
 .about p { line-height: 28px; }
 .about h2:not(:first-child) { margin-top: 16px; }
@@ -201,8 +199,10 @@ input[type="search"] { width: 12rem; }
 .matrix thead th {
   vertical-align: bottom;
   font-weight: 500;
-  text-align: left;
+  text-align: center;
 }
+
+.matrix thead th.name { text-align: left; }
 
 .matrix .col {
   writing-mode: vertical-rl;
@@ -282,7 +282,7 @@ input[type="search"] { width: 12rem; }
   display: block;
   width: var(--cell);
   height: var(--cell);
-  background: radial-gradient(circle, var(--line) 1.5px, transparent 2px);
+  background: #f2f5f4;
 }
 
 .matrix .other-col .cell, .matrix .other-col .dot { opacity: 0.55; }
@@ -307,7 +307,7 @@ input[type="search"] { width: 12rem; }
 
 /* Incidents */
 
-.incidents { display: grid; gap: 24px; max-width: 40rem; }
+.incidents { display: grid; gap: 24px; }
 
 .incident { display: grid; gap: 4px; }
 .incident h3 { font-size: 16px; line-height: 24px; font-weight: 600; }

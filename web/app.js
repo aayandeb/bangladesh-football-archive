@@ -135,6 +135,22 @@
       [["s1", "1 incident"], ["s2", "2–3"], ["s3", "4–7"], ["s4", "8 or more"]]
         .map(([s, t]) => `<span><span class="swatch cell ${s}" aria-hidden="true"></span>${t}</span>`)
         .join("") + `<span>Other is shown lighter because it holds incidents that fit no kind.</span>`;
+    fitMatrix();
+  }
+
+  // Grows the squares so the grid reaches the right edge. Below 20px the
+  // matrix scrolls sideways instead.
+  function fitMatrix() {
+    const scroll = $(".matrix-scroll");
+    const head = $("#matrix thead tr");
+    if (!scroll || !head || !head.children.length || scroll.clientWidth === 0) return;
+    const fixed = head.querySelector(".name").offsetWidth
+      + [...head.querySelectorAll(".num")].reduce((sum, el) => sum + el.offsetWidth, 0);
+    const cols = head.children.length - 1 - head.querySelectorAll(".num").length;
+    if (cols < 1) return;
+    const gaps = head.children.length * 2 + head.querySelectorAll(".group-start").length * 10 + 16;
+    const size = Math.max(20, Math.floor((scroll.clientWidth - fixed - gaps) / cols));
+    document.documentElement.style.setProperty("--cell", `${size}px`);
   }
 
   function matrixHover(target) {
@@ -167,6 +183,7 @@
     const sel = $("#min-kinds");
     for (let k = 1; k <= 10; k++) sel.add(new Option(String(k), String(k), false, k === state.minKinds));
     sel.addEventListener("change", () => { state.minKinds = +sel.value; renderMatrix(); });
+    new ResizeObserver(() => fitMatrix()).observe($(".matrix-scroll"));
   }
 
   // Shared incident rendering
