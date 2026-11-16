@@ -155,5 +155,21 @@
   <script src="vendor/force-graph.min.js"></script>
   <script src="data/archive.js"></script>
   <script src="app.js"></script>
+  <script>
+    (function () {
+      var host = location.hostname;
+      if (!host || host === "localhost" || host === "127.0.0.1") return;
+      window.va = function () {
+        (window.vaq = window.vaq || []).push(arguments);
+      };
+      window.va("beforeSend", function (event) {
+        return Object.assign({}, event, { url: "/" });
+      });
+      var s = document.createElement("script");
+      s.async = true;
+      s.src = "/_vercel/insights/script.js";
+      document.head.appendChild(s);
+    })();
+  </script>
 </body>
 </html>
