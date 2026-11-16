@@ -1,6 +1,6 @@
 # Visualization Plan — Knowledge Graph Web View
 
-Status: proposed, 16 November 2026. Based on the v1 export (`data/export/archive_export.json`: 273 incidents, 600 nodes, 7,835 edges).
+Status: proposed, 16 November 2026. Based on the v2 export (`data/export/archive_export-v2.json`: 608 incidents, 719 nodes, 7,758 edges), pending the owner's confirmation that v2 replaces v1. The v1 export (`data/export/archive_export.json`: 273 incidents, 600 nodes, 7,835 edges) stays in the repo as the baseline.
 
 ## Goal
 
@@ -12,21 +12,36 @@ The page is a view of the data, not the product. It reads the export, derives wh
 
 - **Allegations, not verdicts.** The page shows that fans alleged something, with sources. Wording such as "appears in 54 incidents" is fine. Wording such as "involved in 54 scandals" is not. A short, permanent note on the page says this.
 - **Every claim is one click from its source.** Entity, then incidents, then post permalinks.
-- **Show the data version.** The page header shows "v1 baseline" and the export date. When a validated v2 export replaces v1, the build script is rerun and the label changes.
+- **Show the data version.** The page header shows the export version (`meta.version`, which v2 has and v1 lacks, so a missing value means v1) and the generation date. The build script takes the export path as an argument, so switching versions means rerunning it.
 - **Free to run.** Static files only, with no backend, paid hosting, or API keys. It runs locally with `python3 -m http.server`, and later on GitHub Pages if the owner wants it public.
 - **No visual formatting in data files.** Colours, sizes, and layout live in `web/`, never in `data/`.
 - **Fresh design.** The earlier preview was rejected. Don't reuse its look; phase 1 settles the visual direction before the build.
 
 ## What the data says about the design
 
-These findings from the v1 export drive the choices below.
+These findings from the v2 export drive the choices below. v1 figures are given where the comparison matters.
 
-1. **The raw graph is a hairball.** 6,624 of the 7,835 edges (85%) come from a single shared incident. Showing only edges with 2 or more shared incidents leaves 1,211 edges and 198 nodes.
-2. **Two hubs connect everything.** The Bangladesh Football Federation appears in 165 of the 273 incidents and has 434 edges. The national team has 247 edges. Drawn by default, they pull every node into one blob. Hiding both, with a minimum of 2 shared incidents, leaves 959 edges and 175 nodes.
-3. **Organisations and clubs dominate the category-span ranking.** BFF spans 16 categories, Bashundhara Kings 14, and Mohammedan 13. The syndicate question is mostly about people, so the main ranking needs a "people only" view.
-4. **The people signal is concentrated.** Not counting `other`, 44 people span 3 or more categories and 10 span 5 or more. The top names are Jamal Bhuyan (9 categories, 22 incidents), Kazi Salahuddin (8, 54), Mamunul Islam (7, 29), and Abu Nayeem Shohag (7, 16). The project brief counts `other` and reports 10 and 9 categories for the first two. The page must state which way it counts.
-5. **Edges carry no relation type.** Every edge is "appears with" plus a list of incident IDs. The useful edge attributes are the number of shared incidents and which categories those incidents fall in. Both are derived by the build script.
-6. **Some taxonomy categories are empty in v1.** `broadcast_blackout`, `foreign_player_naturalisation`, and `player_welfare_neglect` were promoted after v1 ran, so their v1 incidents still sit under `other`. `nepotism` has 1 incident and `drug_doping` 2. The views should keep all 20 categories in a fixed order so v1 and v2 line up.
+1. **The raw graph is a hairball.** 6,427 of the 7,758 edges (83%) come from a single shared incident. Showing only edges with 2 or more shared incidents leaves 1,331.
+2. **Two hubs connect everything.** The Bangladesh Football Federation appears in 293 of the 608 incidents and has 488 edges. The national team has 276 edges. Drawn by default, they pull every node into one blob. Hiding both, with a minimum of 2 shared incidents, leaves 1,048 edges and 217 nodes.
+3. **Organisations and clubs dominate the category-span ranking.** BFF spans 19 categories, the national team 18, Bashundhara Kings 17, and Abahani and Mohammedan 16 each. The syndicate question is mostly about people, so the main ranking needs a "people only" view.
+4. **The people signal is clearer in v2.** Not counting `other`, 58 people span 3 or more categories and 22 span 5 or more (v1: 44 and 10). The top names are Mamunul Islam (12 categories, 31 incidents), Jamal Bhuyan (12, 30), Kazi Salahuddin (11, 83), Zahid Hassan Emily (9, 22), and Oscar Bruzon (8, 19). Counting `other` adds one to each of those five. The page must state which way it counts.
+5. **v2 incidents are tighter.** The average incident names 4.7 entities, down from 7.1 in v1. That is why v2 has more than twice the incidents but slightly fewer edges: v1's large clusters (up to 32 entities) created many weak links.
+6. **Edges carry no relation type.** Every edge is "appears with" plus a list of incident IDs. The useful edge attributes are the number of shared incidents and which categories those incidents fall in. Both are derived by the build script.
+7. **All 20 categories are now in use.** The three promoted categories have real counts in v2: `player_welfare_neglect` 31, `broadcast_blackout` 18, `foreign_player_naturalisation` 11. `other` is the largest category at 87 incidents, so a filter to hide it matters. The views keep all 20 categories in a fixed taxonomy order.
+
+## v2 export check (16 November 2026)
+
+Checked against its own posts and incidents:
+
+- **Passes:** no duplicate incident IDs, every edge endpoint and edge incident ID exists, every incident's posts exist, every incident has Facebook permalinks, and no post sits in two incidents.
+- **Relationship to v1:** 270 of the 273 v1 incident IDs are reused, but only 25 keep exactly the same posts. 1,568 of the 1,612 v1 incident posts are inside some v2 incident. v2 is a re-clustering, not v1 plus additions, so v1 and v2 incidents can't be compared by ID.
+- **17 incidents name no entities**, so they never appear in the graph. They still belong in the incident list and timeline.
+- **Three entities are split across two spellings:**
+  - `NoFeL SC` and `NoFel SC` share the node ID `nofel_sc`. The graph therefore has two nodes with one ID and three duplicate edge pairs. Node counts on these two are wrong (3 and 2 instead of 5).
+  - `Daily Star` and `The Daily Star` are separate nodes.
+  - `Manang Marshyangdi` and `Manang Marshyangdi Club` are separate nodes.
+
+  None are central names, so the main findings don't change. The right fix is upstream in Muse's entity map. Until then, the build script merges nodes that share an ID and applies a small alias list kept in `scripts/`, not in `data/`. The script reports both so they don't hide.
 
 ## Views, in build order
 
@@ -70,7 +85,8 @@ This is the evidence trail. It opens from every other view.
 
 ```
 scripts/
-  build_web_data.py      Reads data/export/archive_export.json and writes web/data/*.json
+  build_web_data.py      Reads an export (default: data/export/archive_export-v2.json) and writes web/data/*.json
+  entity_aliases.json    Temporary spelling merges until the entity map is fixed upstream
   validate_export.py     Checks the export before building (see below)
 web/
   index.html             One page, tabbed or stacked views
@@ -85,8 +101,8 @@ web/
 
 - Python standard library only, with no dependencies.
 - The web data is committed so the page works on GitHub Pages without a build step. It is small, under 1 MB, because classified posts are left out.
-- The browser never loads the 13.6 MB export.
-- Bangla text uses Noto Sans Bengali as a fallback font. In v1 only one node label is non-ASCII, but summaries and later data may have more.
+- The browser never loads the 14 MB export.
+- Bangla text uses Noto Sans Bengali as a fallback font. Node labels are almost all in English, but summaries and later data may contain Bangla.
 
 ### Validation in `validate_export.py`
 
@@ -109,7 +125,7 @@ The build stops if any of these fail:
 | 4 | Co-appearance network | Default view is readable without adjusting controls, and clicking a node opens the profile | 100k–200k tokens |
 | 5 | Review with owner, polish, optional timeline, optional GitHub Pages | Owner signs off | Varies |
 
-Budgets assume the agent inspects the export only through small Python snippets and never opens the 13.6 MB file directly.
+Budgets assume the agent inspects the export only through small Python snippets and never opens an export file directly.
 
 **Model choice.** A fast model is enough for phases 2 to 4 if it is given this document. Phase 1 involves design judgment, so a stronger model is worth using there, or anywhere a fast model loops on visual fixes.
 
@@ -124,4 +140,5 @@ Budgets assume the agent inspects the export only through small Python snippets 
 1. Should the category span count `other`? The plan shows both numbers but needs one as the default.
 2. Should BFF and the national team be hidden from the network by default? They stay visible in the matrix either way.
 3. Is the page private (local only) or eventually public on GitHub Pages? If public, the repo must be public too, or hosted elsewhere for free.
-4. When v2 is validated, should the page show v1 and v2 side by side, or switch to v2 only?
+4. Does v2 replace v1 for the page? The plan assumes yes. Since v2 re-clusters rather than extends v1, a side-by-side comparison would only make sense at the entity level (incident counts and categories per name), not incident by incident.
+5. Should Muse fix the three split entities in its entity map and re-export, or is the alias list in the build script enough?
