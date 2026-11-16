@@ -13,9 +13,15 @@
   <div class="layout">
     <main id="main">
       <header class="intro">
-        <h1>Bangladesh Football Archive</h1>
+        <div class="intro-row">
+          <h1>Bangladesh Football Archive</h1>
+          <a class="contact" href="https://github.com/aayandeb/bangladesh-football-archive/issues/new" target="_blank" rel="noopener">Contact</a>
+        </div>
         <p>Controversies in Bangladesh football from 2014 to 2021, gathered from posts in the fan group Bangladesh Football – Walking Around The Dreams.</p>
-        <p class="quiet">Each incident records what fans alleged, with links to their posts. None of it is a finding of fact.</p>
+        <div class="disclaimer" role="note">
+          <p lang="bn">সমর্থকদের অভিযোগ, প্রমাণিত তথ্য নয়। প্রতিটি ঘটনা ফেসবুকের পোস্ট থেকে নেওয়া। কোনো নামের পাশে সংখ্যা মানে শুধু এইটুকু: ওই নাম ওই পোস্টগুলোতে আছে। পোস্ট না পড়ে কোনো সিদ্ধান্ত নেবেন না।</p>
+          <p>These are fan allegations, not established facts. Every incident comes from Facebook posts. A number beside a name means only that fans named that person or club in those posts. Read the posts before you conclude anything.</p>
+        </div>
         <p class="quiet small" id="meta"></p>
       </header>
 
@@ -23,6 +29,7 @@
         <a href="#categories" data-view="categories">Categories</a>
         <a href="#connections" data-view="connections">Connections</a>
         <a href="#incidents" data-view="incidents">Incidents</a>
+        <a href="#about" data-view="about">About</a>
       </nav>
 
       <section id="view-categories" class="view" aria-labelledby="matrix-heading">
@@ -98,6 +105,22 @@
         </div>
         <div id="inc-list" class="incidents"></div>
         <button type="button" class="more" id="inc-more" hidden>Show 50 more</button>
+      </section>
+
+      <section id="view-about" class="view about" lang="bn" hidden>
+        <h2>এই আর্কাইভ কেন</h2>
+        <div class="prose">
+          <p>বাংলাদেশের ফুটবল নিয়ে সমর্থকদের অভিযোগ বছরের পর বছর পোস্টে ওঠে, আর কিছুদিন পর হারিয়ে যায়। এই আর্কাইভ সেই কথাগুলো এক জায়গায় রাখে। উদ্দেশ্য সমর্থকদের সচেতন করা, যাতে যে কেউ একটি ঘটনা পড়তে পারেন এবং যে পোস্ট থেকে ঘটনাটি এসেছে, সেই পোস্ট পর্যন্ত নিজে গিয়ে দেখতে পারেন।</p>
+          <p>এটি কোনো রায় নয়। এটি সংবাদমাধ্যমের যাচাই করা প্রতিবেদনও নয়। এখানে যা আছে, তা সমর্থকদের অভিযোগের নথি। সমর্থকেরা যা বলেছেন, তাই এখানে রাখা হয়েছে, উৎসসহ।</p>
+          <h2>উৎস</h2>
+          <p>পোস্ট এসেছে ফেসবুক গ্রুপ Bangladesh Football – Walking Around The Dreams থেকে। গ্রুপটি ২০১৪ সালের ৩ সেপ্টেম্বর তৈরি হয়। সংগ্রহের সময় ২০১৪ সালের সেপ্টেম্বর থেকে ২০২১ সালের ডিসেম্বর। যে পোস্ট মুছে ফেলা হয়েছে, সেটি এখানে নেই। সংবাদপত্রের খবর এখনো যোগ করা হয়নি। পরে যোগ হলে, একটি ঘটনার পাশে দেখা যাবে সমর্থকেরা কী বলেছেন এবং পত্রিকা কী লিখেছে।</p>
+          <h2>কীভাবে সাজানো</h2>
+          <p>আগে প্রতিটি পোস্টকে বিষয় ও ভাব অনুসারে ভাগ করা হয়েছে। বিতর্ক খুঁজে বাকি পোস্ট ফেলে দেওয়া হয়নি, কারণ স্বাভাবিক আলোচনা না দেখলে বিতর্ক চেনা যায় না। পরে একই সময়ের, একই নামের, একই ঘটনার পোস্ট মিলিয়ে একটি ঘটনা করা হয়েছে। ঘটনার ধরন — দল বাছাই, কোচ নিয়োগ, রেফারি, অর্থ, ফেডারেশনের রাজনীতি — বসে ঘটনার ওপর, আলাদা পোস্টের ওপর নয়।</p>
+          <h2>কী দেখতে চাইছি</h2>
+          <p>সমর্থকেরা অনেক দিন ধরে বলেন, বাংলাদেশের ফুটবল একটি ছোট গোষ্ঠী নিয়ন্ত্রণ করে। একটা পোস্ট দিয়ে সেই কথা প্রমাণ হয় না। দেখার বিষয় হলো পুনরাবৃত্তি। দল বাছাই, কোচ নিয়োগ, ফেডারেশনের ক্ষমতার লড়াই, টাকাপয়সা, রেফারি — এসব আলাদা ধরনের ঘটনায় কি বারবার একই কয়েকটি নাম আসে, আর কারা একই ঘটনায় একসঙ্গে উল্লেখিত হন। এই পাতার ছক আর সংযোগের মানচিত্র সেই পুনরাবৃত্তি দেখায়। সিদ্ধান্ত পাঠকের।</p>
+          <h2>সীমা</h2>
+          <p>মন্তব্যের বড় অংশ, বিশেষ করে ২০১৪ ও ২০১৫ সালের, ফেসবুক থেকে আর তোলা যায়নি। কোনো দাবির পেছনে পোস্ট না থাকলে সেই দাবি এখানে রাখা হয়নি। কোনো নাম ভুল মিলিয়ে ফেলা হয়েছে মনে হলে, বা কোনো ঘটনার সূত্র নিয়ে প্রশ্ন থাকলে, ওপরের যোগাযোগ বোতামে লিখুন।</p>
+        </div>
       </section>
     </main>
 

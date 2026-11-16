@@ -10,7 +10,7 @@ The page is a reading tool for Bangladeshi fans and for the project owner. Its j
 
 1. **The data is the design.** The category matrix is the one memorable element. Everything else is quiet, with plain type, no decoration, and a lot of space.
 2. **Every number is a door.** A count on screen opens the incidents behind it, and an incident opens its Facebook posts. If something can't be clicked through to a source, it shouldn't look like a finding.
-3. **Attribute, don't accuse.** Copy says "named in 83 incidents", never "involved in 83 scandals". The note explaining that incidents are fan allegations is always visible on the main view, not hidden in an about page.
+3. **Attribute, don't accuse.** Copy says "named in 83 incidents", never "involved in 83 scandals". The allegation disclaimer stays in the page header, above the tabs, in Bangla and then English. The About tab explains the project. It does not replace the disclaimer.
 4. **One accent, used only for data.** Green marks data: matrix cells, people in the network, timeline ticks. Links, buttons, and headings stay ink-coloured.
 5. **Remove one more thing.** Before shipping a change, look at the screen and remove one element. If nothing can go, it's done.
 
@@ -47,6 +47,7 @@ The width axis does the work a second typeface would:
 - Numbers use `font-variant-numeric: tabular-nums` wherever they line up in a column.
 - Sentence case everywhere. No all-caps text, no letter-spaced labels.
 - Body text runs no wider than about 70 characters (`max-width: 38rem` on prose).
+- Bangla prose on the About tab uses the same size and weight, with line height 28px so the lines can breathe.
 
 ## Layout
 
@@ -111,6 +112,9 @@ The entity panel opens on the right as a 30rem column and pushes the main view t
 - Counts are sentences or plain labels, not slogans: "Named in 30 incidents across 12 kinds", not "30 INCIDENTS".
 - Remove classifier notes such as "Suggested new category: …" from summaries before display.
 - Empty states say what to change: "No one spans 6 or more kinds with this filter. Lower the number to see more."
+- The disclaimer is a note, not a banner. It sits under the introduction, separated by one Line rule, with no background and no accent colour.
+- The About tab is in Bangla. It states the aim, the Facebook source, how incidents were gathered, and the syndicate question as a question for the reader. It does not conclude that a syndicate exists.
+- One Contact link, in the header, uses the filter-button style. It opens a new issue on this repository. No email address is published on the page.
 
 ## Accessibility and quality floor
 

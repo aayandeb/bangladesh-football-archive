@@ -60,8 +60,22 @@ main {
   min-width: 0;
 }
 
-.intro { max-width: 38rem; display: grid; gap: 8px; }
+.intro { max-width: 40rem; display: grid; gap: 8px; }
+.intro-row { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px 24px; }
 .intro h1 { margin-bottom: 8px; }
+
+.disclaimer {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.about { max-width: 38rem; }
+.about .prose { display: grid; gap: 16px; }
+.about p { line-height: 28px; }
+.about h2:not(:first-child) { margin-top: 16px; }
 
 .tabs {
   display: flex;
@@ -90,6 +104,7 @@ main {
 
 .choice button,
 .more,
+.contact,
 .panel button.filter,
 .panel .close {
   height: var(--control);
@@ -155,6 +170,15 @@ input[type="search"] { width: 12rem; }
 .suggest .none { color: var(--quiet); cursor: default; }
 
 .more { justify-self: start; }
+
+.contact {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  margin-top: 4px;
+  text-decoration: none;
+}
+.contact:hover { border-color: var(--ink); }
 
 /* Matrix */
 

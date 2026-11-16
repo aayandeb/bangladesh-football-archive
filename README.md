@@ -13,6 +13,10 @@ python3 scripts/serve.py            # then open http://localhost:8000
 
 Opening `web/index.html` directly from disk also works. The build defaults to the v2.1 export; pass another export path to build from it instead. Before changing anything under `web/`, read [`docs/design.md`](docs/design.md).
 
+## Publishing
+
+`vercel.json` serves `web/` as a static site, with no build step. Import the GitHub repository at [vercel.com/new](https://vercel.com/new) and deploy. Leave the framework as Other. The output directory is already set.
+
 ## Layout
 
 ```

@@ -14,7 +14,7 @@
     other: ["name", "names", "Other"],
   };
   const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const VIEWS = ["categories", "connections", "incidents"];
+  const VIEWS = ["categories", "connections", "incidents", "about"];
 
   const bySlug = new Map(ENTS.map((e, i) => [e.slug, i]));
   const hubs = new Set(HUB_SLUGS.map((s) => bySlug.get(s)).filter((i) => i !== undefined));
