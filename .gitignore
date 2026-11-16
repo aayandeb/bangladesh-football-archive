@@ -1,0 +1,9 @@
+# Raw Facebook API pages: full third-party post text, ~40 MB.
+# Canonical copy lives in the Google Drive folder "Bangladesh Football Archive".
+data/raw/
+
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+node_modules/
