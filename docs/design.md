@@ -50,7 +50,7 @@ The width axis does the work a second typeface would:
 
 ## Layout
 
-Left-aligned throughout. The header row spans the page: the title on the left, Contact on the right. Landing is the Categories page. On the right of that grid, the incident count sits immediately left of Kinds. Rows are sorted by the incident count, so a name that appears often ranks above a name that merely spans many kinds. The squares stay 20px and the grid scrolls sideways on a narrow window.
+Left-aligned throughout. The header row spans the page: the title on the left, Contact on the right. Landing is the Categories page. On the right of that grid, the incident count sits immediately left of Kinds. Rows are sorted by the incident count, so a name that appears often ranks above a name that merely spans many kinds. The squares stay 20px. On a wide window the grid sits a little in from the left edge. The header stays on the left. On a narrow window the grid scrolls sideways.
 
 ```
 Bangladesh Football Archive

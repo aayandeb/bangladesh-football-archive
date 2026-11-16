@@ -182,7 +182,14 @@ input[type="search"] { width: 12rem; }
 
 .status { min-height: 18px; }
 
-.matrix-scroll { overflow-x: auto; padding-bottom: 8px; }
+.matrix-scroll {
+  width: fit-content;
+  max-width: 100%;
+  /* A wide window leaves the grid a little in from the left, not halfway across. */
+  margin-left: max(0px, calc((100% - 50rem) * 0.22));
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
 
 .matrix {
   border-collapse: separate;
