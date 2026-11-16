@@ -163,7 +163,7 @@
         (window.vaq = window.vaq || []).push(arguments);
       };
       window.va("beforeSend", function (event) {
-        return Object.assign({}, event, { url: "/" });
+        return Object.assign({}, event, { url: location.origin + "/" });
       });
       var s = document.createElement("script");
       s.async = true;
