@@ -72,7 +72,7 @@
     const [y, mo, d] = m.generated.split("-").map(Number);
     $("#counts").textContent =
       `${INCS.length.toLocaleString("en")} incidents · ${Number(m.incident_posts).toLocaleString("en")} source posts · ${Number(m.posts).toLocaleString("en")} posts analyzed`;
-    $("#meta").textContent = `Data version ${m.version} · Updated ${d} ${MONTHS_FULL[mo - 1]} ${y}`;
+    $("#meta").textContent = `v${m.version} · Updated ${d} ${MONTHS_FULL[mo - 1]} ${y}`;
   }
 
   // Categories view

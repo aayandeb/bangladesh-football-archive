@@ -37,7 +37,7 @@ The width axis does the work a second typeface would:
 
 | Role | Size / line height | Weight | Width |
 |---|---|---|---|
-| Page title | 34 / 38 | 600 | 112% |
+| Page title | 32 / 38 | 600 | 112% |
 | Entity name in the panel | 28 / 32 | 600 | 106% |
 | Section heading | 18 / 24 | 600 | 100% |
 | Body and summaries | 16 / 24 | 400 | 100% |
@@ -50,12 +50,13 @@ The width axis does the work a second typeface would:
 
 ## Layout
 
-Left-aligned throughout. The header row spans the page: the title on the left, Contact on the right. Landing is the Categories page. On the right of that grid, the incident count sits immediately left of Kinds. Rows are sorted by the incident count, so a name that appears often ranks above a name that merely spans many kinds. The squares stay 20px. On a wide window the grid sits a little in from the left edge. The header stays on the left. On a narrow window the grid scrolls sideways.
+The page is one centered column, at most 1440px wide, with 72px of side padding and 56px above the title. On a narrow window the side padding drops to 24px. The title stays left and Contact stays right. Under that, the introduction takes about two thirds and "Reading this archive" takes the rest, with a 40px gutter. On a narrow window the disclaimer stacks under the introduction. The counts sit on the left of the next line and the version on the right. The tabs have a Line rule under them. Landing is the Categories page. On the right of that grid, the incident count sits immediately left of Kinds. Rows are sorted by the incident count, so a name that appears often ranks above a name that merely spans many kinds. The squares stay 20px. The grid lines up with the column and scrolls sideways inside it.
 
 ```
-Bangladesh Football Archive
-One sentence on what this is. The allegation note, in Quiet.
-v2, generated 16 Nov 2026, 608 incidents from 3,397 posts.
+Bangladesh Football Archive                              Contact
+What this is, in English.              | Reading this archive
+The same, in Bangla.                   | Allegations, not findings.
+608 incidents · 3,397 source posts · 24,370 posts analyzed     v2.1 · Updated 16 November 2026
 
 Categories    Connections    Incidents    About   (text tabs, the current one underlined)
 
@@ -110,7 +111,7 @@ The entity panel opens on the right as a 30rem column and pushes the main view t
 - Counts are sentences or plain labels, not slogans: "Named in 30 incidents across 12 kinds", not "30 INCIDENTS".
 - Remove classifier notes such as "Suggested new category: …" from summaries before display.
 - Empty states say what to change: "No one spans 6 or more kinds with this filter. Lower the number to see more."
-- The header copy is the owner's. The English introduction, the Bangla note, and "A note on the data" stay as written. The two lines under them are "608 incidents · 3,397 source posts · 24,370 posts analyzed" and "Data version 2.1 · Updated 16 November 2026", with the numbers and date filled from the export. The disclaimer sits under the introduction, separated by one Line rule, with no background and no accent colour.
+- The header copy is the owner's. The English introduction and the Bangla introduction stay on the left. "Reading this archive" is the only verification note, on the right, so the warning is not said twice in English. The line under them is "608 incidents · 3,397 source posts · 24,370 posts analyzed" on the left and "v2.1 · Updated 16 November 2026" on the right, with the numbers and date filled from the export. The disclaimer has a Line rule on its left, no background and no accent colour.
 - The About tab is the owner's Bangla text. It states the aim, the Facebook source, how incidents were gathered, and the syndicate question as a question for the reader. It does not conclude that a syndicate exists.
 - One Contact link, in the header, uses the filter-button style. It opens a message to aayan.deb@outlook.com.
 
