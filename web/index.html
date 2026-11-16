@@ -55,6 +55,14 @@
             <select id="min-kinds"></select>
             kinds
           </label>
+          <div class="find">
+            <label for="matrix-find">Find</label>
+            <div class="combo">
+              <input type="search" id="matrix-find" placeholder="A name" autocomplete="off" spellcheck="false"
+                role="combobox" aria-expanded="false" aria-controls="matrix-suggest" aria-autocomplete="list">
+              <ul id="matrix-suggest" class="suggest" role="listbox" aria-label="Matching names" hidden></ul>
+            </div>
+          </div>
         </div>
         <p class="status small" id="matrix-status"></p>
         <div class="matrix-scroll">

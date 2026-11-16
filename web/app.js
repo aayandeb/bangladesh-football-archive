@@ -167,6 +167,26 @@
     const sel = $("#min-kinds");
     for (let k = 1; k <= 10; k++) sel.add(new Option(String(k), String(k), false, k === state.minKinds));
     sel.addEventListener("change", () => { state.minKinds = +sel.value; renderMatrix(); });
+    bindSuggest({
+      input: "#matrix-find",
+      list: "#matrix-suggest",
+      option: "matrix-opt",
+      empty: "No name matches",
+      candidates: () => ENTS.map((_, i) => i),
+      onChoose: showInMatrix,
+    });
+  }
+
+  function showInMatrix(i) {
+    const e = ENTS[i];
+    if (state.type !== e.type) state.type = e.type;
+    if (e.kinds >= 1 && e.kinds < state.minKinds) {
+      state.minKinds = e.kinds;
+      $("#min-kinds").value = String(e.kinds);
+    }
+    renderMatrix();
+    document.querySelector(`#matrix tr[data-row="${i}"]`)?.scrollIntoView({ block: "center" });
+    openEntity(i);
   }
 
   // Shared incident rendering
@@ -536,9 +556,9 @@
     }
   }
 
-  function bindFind() {
-    const input = $("#net-find");
-    const list = $("#net-suggest");
+  function bindSuggest({ input, list, option, empty, candidates, onChoose }) {
+    input = $(input);
+    list = $(list);
     let items = [];
     let active = -1;
 
@@ -547,13 +567,13 @@
       list.innerHTML = items.length
         ? items
             .map((i, k) =>
-              `<li role="option" id="net-opt-${k}" data-k="${k}" aria-selected="${k === active}">` +
+              `<li role="option" id="${option}-${k}" data-k="${k}" aria-selected="${k === active}">` +
               `${esc(ENTS[i].label)}<span>${TYPE_NAMES[ENTS[i].type][2]}</span></li>`)
             .join("")
-        : `<li class="none" role="option" aria-disabled="true">No name in the network matches</li>`;
+        : `<li class="none" role="option" aria-disabled="true">${empty}</li>`;
       list.hidden = !open;
       input.setAttribute("aria-expanded", String(open));
-      if (active >= 0) input.setAttribute("aria-activedescendant", `net-opt-${active}`);
+      if (active >= 0) input.setAttribute("aria-activedescendant", `${option}-${active}`);
       else input.removeAttribute("aria-activedescendant");
     };
     const close = () => {
@@ -568,15 +588,14 @@
       if (i === undefined) return;
       input.value = ENTS[i].label;
       close();
-      focusNode(i);
+      onChoose(i);
     };
 
     input.addEventListener("input", () => {
       const q = input.value.trim().toLowerCase();
       if (!q) return close();
-      const shown = new Set(graph.graphData().nodes.map((n) => n.id));
       const starts = (i) => ENTS[i].label.toLowerCase().startsWith(q);
-      items = [...shown]
+      items = candidates()
         .filter((i) => ENTS[i].label.toLowerCase().includes(q))
         .sort((a, b) => starts(b) - starts(a) || ENTS[b].kinds - ENTS[a].kinds || ENTS[a].label.localeCompare(ENTS[b].label))
         .slice(0, 8);
@@ -611,7 +630,14 @@
     $("#min-shared").addEventListener("change", (ev) => { state.minShared = +ev.target.value; refreshGraph(); });
     cat.addEventListener("change", () => { state.netCat = cat.value; refreshGraph(); });
     $("#net-hubs").addEventListener("change", (ev) => { state.netHubs = ev.target.checked; refreshGraph(); });
-    bindFind();
+    bindSuggest({
+      input: "#net-find",
+      list: "#net-suggest",
+      option: "net-opt",
+      empty: "No name in the network matches",
+      candidates: () => graph.graphData().nodes.map((n) => n.id),
+      onChoose: focusNode,
+    });
   }
 
   // Incidents view
