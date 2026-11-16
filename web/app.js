@@ -14,6 +14,7 @@
     other: ["name", "names", "Other"],
   };
   const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const MONTHS_FULL = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const VIEWS = ["categories", "connections", "incidents", "about"];
 
   const bySlug = new Map(ENTS.map((e, i) => [e.slug, i]));
@@ -69,10 +70,9 @@
   function renderMeta() {
     const m = A.meta;
     const [y, mo, d] = m.generated.split("-").map(Number);
-    $("#meta").textContent =
-      `Data version ${m.version}, generated ${d} ${MONTHS[mo - 1]} ${y}. ` +
-      `${plural(INCS.length, "incident", "incidents")} drawn from ${plural(m.incident_posts, "post", "posts")}, ` +
-      `out of ${m.posts.toLocaleString("en")} posts classified.`;
+    $("#counts").textContent =
+      `${INCS.length.toLocaleString("en")} incidents · ${Number(m.incident_posts).toLocaleString("en")} source posts · ${Number(m.posts).toLocaleString("en")} posts analyzed`;
+    $("#meta").textContent = `Data version ${m.version} · Updated ${d} ${MONTHS_FULL[mo - 1]} ${y}`;
   }
 
   // Categories view

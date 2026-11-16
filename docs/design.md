@@ -110,8 +110,8 @@ The entity panel opens on the right as a 30rem column and pushes the main view t
 - Counts are sentences or plain labels, not slogans: "Named in 30 incidents across 12 kinds", not "30 INCIDENTS".
 - Remove classifier notes such as "Suggested new category: …" from summaries before display.
 - Empty states say what to change: "No one spans 6 or more kinds with this filter. Lower the number to see more."
-- The disclaimer is a note, not a banner. It sits under the introduction, separated by one Line rule, with no background and no accent colour.
-- The About tab is in Bangla. It states the aim, the Facebook source, how incidents were gathered, and the syndicate question as a question for the reader. It does not conclude that a syndicate exists.
+- The header copy is the owner's. The English introduction, the Bangla note, and "A note on the data" stay as written. The two lines under them are "608 incidents · 3,397 source posts · 24,370 posts analyzed" and "Data version 2.1 · Updated 16 November 2026", with the numbers and date filled from the export. The disclaimer sits under the introduction, separated by one Line rule, with no background and no accent colour.
+- The About tab is the owner's Bangla text. It states the aim, the Facebook source, how incidents were gathered, and the syndicate question as a question for the reader. It does not conclude that a syndicate exists.
 - One Contact link, in the header, uses the filter-button style. It opens a new issue on this repository. No email address is published on the page.
 
 ## Accessibility and quality floor
