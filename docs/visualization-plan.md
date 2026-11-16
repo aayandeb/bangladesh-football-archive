@@ -29,6 +29,16 @@ These findings from the v2 export drive the choices below. v1 figures are given 
 6. **Edges carry no relation type.** Every edge is "appears with" plus a list of incident IDs. The useful edge attributes are the number of shared incidents and which categories those incidents fall in. Both are derived by the build script.
 7. **All 20 categories are now in use.** The three promoted categories have real counts in v2: `player_welfare_neglect` 31, `broadcast_blackout` 18, `foreign_player_naturalisation` 11. `other` is the largest category at 87 incidents, so a filter to hide it matters. The views keep all 20 categories in a fixed taxonomy order.
 
+## v2.1 export (16 November 2026)
+
+The web view now builds from `archive_export-v2.1.json`. It is a relabel-only update of v2, checked against it:
+
+- Incident IDs, post lists, titles, and posts are identical to v2.
+- 55 incidents changed category. 18 moved from `broadcast_blackout` to `broadcast_coverage`, 37 left `other` (11 to `foreign_players_domestic`, 9 to `development_neglect`, 8 to `club_mismanagement`, 6 to `broadcast_coverage`, 3 to `player_welfare_neglect`). `other` dropped from 87 to 50.
+- 39 summaries changed, only to remove the "Suggested new category" notes for the promoted categories.
+- The three duplicate entities are merged and the graph block now agrees with the incidents, so the alias list in `scripts/` was removed.
+- Top people by kinds, not counting Other: Jamal Bhuyan 13 kinds and 30 incidents, Mamunul Islam 12 and 31, Kazi Salahuddin 11 and 83, Zahid Hassan Emily 10 and 22, Oscar Bruzon 10 and 19. 62 people span 3 or more kinds and 23 span 5 or more.
+
 ## v2 export check (16 November 2026)
 
 Checked against its own posts and incidents:

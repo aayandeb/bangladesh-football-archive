@@ -119,6 +119,41 @@ input[type="search"] { width: 12rem; }
 
 .check input { width: 16px; height: 16px; margin: 0; accent-color: var(--ink); }
 
+.find { display: flex; align-items: center; gap: 8px; }
+.combo { position: relative; }
+
+.suggest {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 5;
+  min-width: 100%;
+  width: max-content;
+  max-width: 20rem;
+  max-height: 16rem;
+  overflow-y: auto;
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+}
+
+.suggest[hidden] { display: none; }
+
+.suggest li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.suggest li span { color: var(--quiet); font-size: 13px; }
+.suggest li[aria-selected="true"] { background: var(--line); }
+.suggest .none { color: var(--quiet); cursor: default; }
+
 .more { justify-self: start; }
 
 /* Matrix */

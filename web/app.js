@@ -398,31 +398,52 @@
     ctx.globalAlpha = 1;
   }
 
-  // Labels are drawn after all nodes so no circle covers a name.
+  // Labels are drawn after all nodes so no circle covers a name. They are
+  // placed in priority order and a label that would overlap one already
+  // placed is skipped.
   function drawLabels(ctx, scale) {
     const focus = hover ?? state.entity;
     const focused = focus !== null && netNeighbours.has(focus);
-    ctx.font = `500 ${12 / scale}px "Anek Bangla", system-ui, sans-serif`;
+    const nodes = graph.graphData().nodes;
+    const byId = new Map(nodes.map((n) => [n.id, n]));
+
+    let order;
+    if (focused) {
+      order = [focus, ...litLabels];
+    } else {
+      order = [...labelled];
+      if (scale > 2.5) order = order.concat(nodes.map((n) => n.id).filter((id) => !labelled.has(id)));
+    }
+
+    const font = (id) =>
+      id === focus
+        ? `600 ${13 / scale}px "Anek Bangla", system-ui, sans-serif`
+        : `500 ${12 / scale}px "Anek Bangla", system-ui, sans-serif`;
+    const half = 8 / scale;
+    const gap = 2 / scale;
+    const placed = [];
+    const toDraw = [];
+    for (const id of order) {
+      const node = byId.get(id);
+      if (!node) continue;
+      const e = ENTS[id];
+      ctx.font = font(id);
+      const x = node.x + radius(e) + 3 / scale;
+      const box = [x - gap, node.y - half, x + ctx.measureText(e.label).width + gap, node.y + half];
+      if (placed.some((p) => box[0] < p[2] && box[2] > p[0] && box[1] < p[3] && box[3] > p[1])) continue;
+      placed.push(box);
+      toDraw.push([id, x, node.y]);
+    }
+
     ctx.textBaseline = "middle";
     ctx.lineJoin = "round";
-    ctx.lineWidth = 3 / scale;
     ctx.strokeStyle = COLORS.paper;
     ctx.fillStyle = COLORS.ink;
-    const label = (node) => {
-      const e = ENTS[node.id];
-      const x = node.x + radius(e) + 3 / scale;
-      ctx.strokeText(e.label, x, node.y);
-      ctx.fillText(e.label, x, node.y);
-    };
-    let focusNode = null;
-    for (const node of graph.graphData().nodes) {
-      if (node.id === focus) focusNode = node;
-      else if (focused ? litLabels.has(node.id) : labelled.has(node.id) || scale > 2.5) label(node);
-    }
-    if (focusNode) {
-      ctx.font = `600 ${13 / scale}px "Anek Bangla", system-ui, sans-serif`;
-      ctx.lineWidth = 4 / scale;
-      label(focusNode);
+    for (const [id, x, y] of toDraw.reverse()) {
+      ctx.font = font(id);
+      ctx.lineWidth = (id === focus ? 4 : 3) / scale;
+      ctx.strokeText(ENTS[id].label, x, y);
+      ctx.fillText(ENTS[id].label, x, y);
     }
   }
 
@@ -468,7 +489,7 @@
         if (focus === null || !netNeighbours.has(focus)) return "rgba(93, 106, 101, 0.22)";
         return linkTouches(l, focus) ? COLORS.quiet : "rgba(93, 106, 101, 0.06)";
       })
-      .linkWidth((l) => Math.min(0.4 + (l.w - 1) * 0.45, 5))
+      .linkWidth((l) => Math.min(0.4 + (l.w - 1) * 0.3, 3))
       .onRenderFramePost(drawLabels)
       .cooldownTicks(250)
       .onNodeHover((node) => {
@@ -504,11 +525,84 @@
     $("#net-count").textContent = data.nodes.length
       ? `${plural(data.nodes.length, "name", "names")} shown.`
       : "No names meet these settings. Lower the number of shared incidents.";
-    $("#net-names").innerHTML = data.nodes
-      .map((n) => ENTS[n.id].label)
-      .sort()
-      .map((l) => `<option value="${esc(l)}"></option>`)
-      .join("");
+  }
+
+  function focusNode(i) {
+    openEntity(i);
+    const node = graph.graphData().nodes.find((n) => n.id === i);
+    if (node) {
+      graph.centerAt(node.x, node.y, 0);
+      graph.zoom(2, 0);
+    }
+  }
+
+  function bindFind() {
+    const input = $("#net-find");
+    const list = $("#net-suggest");
+    let items = [];
+    let active = -1;
+
+    const render = () => {
+      const open = input.value.trim() !== "";
+      list.innerHTML = items.length
+        ? items
+            .map((i, k) =>
+              `<li role="option" id="net-opt-${k}" data-k="${k}" aria-selected="${k === active}">` +
+              `${esc(ENTS[i].label)}<span>${TYPE_NAMES[ENTS[i].type][2]}</span></li>`)
+            .join("")
+        : `<li class="none" role="option" aria-disabled="true">No name in the network matches</li>`;
+      list.hidden = !open;
+      input.setAttribute("aria-expanded", String(open));
+      if (active >= 0) input.setAttribute("aria-activedescendant", `net-opt-${active}`);
+      else input.removeAttribute("aria-activedescendant");
+    };
+    const close = () => {
+      items = [];
+      active = -1;
+      list.hidden = true;
+      input.setAttribute("aria-expanded", "false");
+      input.removeAttribute("aria-activedescendant");
+    };
+    const choose = (k) => {
+      const i = items[k];
+      if (i === undefined) return;
+      input.value = ENTS[i].label;
+      close();
+      focusNode(i);
+    };
+
+    input.addEventListener("input", () => {
+      const q = input.value.trim().toLowerCase();
+      if (!q) return close();
+      const shown = new Set(graph.graphData().nodes.map((n) => n.id));
+      const starts = (i) => ENTS[i].label.toLowerCase().startsWith(q);
+      items = [...shown]
+        .filter((i) => ENTS[i].label.toLowerCase().includes(q))
+        .sort((a, b) => starts(b) - starts(a) || ENTS[b].kinds - ENTS[a].kinds || ENTS[a].label.localeCompare(ENTS[b].label))
+        .slice(0, 8);
+      active = items.length ? 0 : -1;
+      render();
+    });
+    input.addEventListener("keydown", (ev) => {
+      if (ev.key === "ArrowDown" || ev.key === "ArrowUp") {
+        if (!items.length) return;
+        ev.preventDefault();
+        active = (active + (ev.key === "ArrowDown" ? 1 : items.length - 1)) % items.length;
+        render();
+      } else if (ev.key === "Enter") {
+        ev.preventDefault();
+        choose(active);
+      } else if (ev.key === "Escape" && !list.hidden) {
+        ev.stopPropagation();
+        close();
+      }
+    });
+    input.addEventListener("blur", close);
+    list.addEventListener("mousedown", (ev) => {
+      ev.preventDefault();
+      const li = ev.target.closest("[data-k]");
+      if (li) choose(+li.dataset.k);
+    });
   }
 
   function bindNetwork() {
@@ -517,14 +611,7 @@
     $("#min-shared").addEventListener("change", (ev) => { state.minShared = +ev.target.value; refreshGraph(); });
     cat.addEventListener("change", () => { state.netCat = cat.value; refreshGraph(); });
     $("#net-hubs").addEventListener("change", (ev) => { state.netHubs = ev.target.checked; refreshGraph(); });
-    $("#net-find").addEventListener("change", (ev) => {
-      const label = ev.target.value.trim().toLowerCase();
-      const node = graph.graphData().nodes.find((n) => ENTS[n.id].label.toLowerCase() === label);
-      if (!node) return;
-      graph.centerAt(node.x, node.y, 0);
-      graph.zoom(3, 0);
-      openEntity(node.id);
-    });
+    bindFind();
   }
 
   // Incidents view

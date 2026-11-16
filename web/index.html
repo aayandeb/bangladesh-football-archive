@@ -65,10 +65,14 @@
             <select id="net-cat"><option value="">All kinds</option></select>
           </label>
           <label class="check"><input type="checkbox" id="net-hubs"> Include the federation and the national team</label>
-          <label>Find
-            <input type="search" id="net-find" list="net-names" placeholder="A name" autocomplete="off">
-            <datalist id="net-names"></datalist>
-          </label>
+          <div class="find">
+            <label for="net-find">Find</label>
+            <div class="combo">
+              <input type="search" id="net-find" placeholder="A name" autocomplete="off" spellcheck="false"
+                role="combobox" aria-expanded="false" aria-controls="net-suggest" aria-autocomplete="list">
+              <ul id="net-suggest" class="suggest" role="listbox" aria-label="Matching names" hidden></ul>
+            </div>
+          </div>
         </div>
         <p class="legend small quiet">
           <svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="5" class="key-person"/></svg> People

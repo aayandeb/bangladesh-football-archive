@@ -19,8 +19,9 @@ from validate_export import DEFAULT_EXPORT, ROOT, validate
 
 OUT = ROOT / "web" / "data" / "archive.js"
 
-# Taxonomy order from docs/project-context.md. Categories the export uses but
-# this list lacks are added before "other" under "Added later".
+# Taxonomy order from docs/project-context.md, plus the v2.1 promotions. Only
+# categories the export uses are shown. Categories the export uses but this
+# list lacks are added before "other" under "Added later".
 GROUPS = [
     ("On the pitch", [
         ("biased_selection", "Biased selection"),
@@ -47,8 +48,12 @@ GROUPS = [
         ("womens_football", "Women's football"),
         ("club_vs_federation", "Clubs vs federation"),
         ("player_welfare_neglect", "Player welfare"),
+        ("club_mismanagement", "Club mismanagement"),
+        ("foreign_players_domestic", "Foreign players in league"),
+        ("development_neglect", "Youth, grassroots"),
     ]),
     ("Media", [
+        ("broadcast_coverage", "Broadcast coverage"),
         ("broadcast_blackout", "Broadcast blackout"),
     ]),
 ]
@@ -65,8 +70,9 @@ def build_categories(used):
     known = set()
     for group, items in GROUPS:
         for cid, label in items:
-            cats.append({"id": cid, "label": label, "group": group})
             known.add(cid)
+            if cid in used:
+                cats.append({"id": cid, "label": label, "group": group})
     for cid in sorted(used - known - {"other"}):
         cats.append({"id": cid, "label": cid.replace("_", " ").capitalize(), "group": "Added later"})
     cats.append({"id": "other", "label": "Other", "group": "Other"})
@@ -76,7 +82,8 @@ def build_categories(used):
 def main():
     path = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_EXPORT
     export = json.loads(path.read_text())
-    aliases = json.loads((ROOT / "scripts" / "entity_aliases.json").read_text())
+    aliases_path = ROOT / "scripts" / "entity_aliases.json"
+    aliases = json.loads(aliases_path.read_text()) if aliases_path.exists() else {}
 
     errors, warnings = validate(export, aliases)
     for w in warnings:
