@@ -353,6 +353,8 @@ input[type="search"] { width: 12rem; }
 
 .incident { display: grid; gap: 4px; }
 .incident h3 { font-size: 16px; line-height: 24px; font-weight: 600; }
+.incident h3 a { text-decoration-color: var(--line); }
+.incident h3 a:hover { text-decoration-color: currentColor; }
 .incident .facts, .incident .posts { color: var(--quiet); }
 
 .incident .facts button {
@@ -397,6 +399,10 @@ input[type="search"] { width: 12rem; }
 .panel-head { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: start; }
 .panel-head h2 { font-size: 28px; line-height: 32px; font-stretch: 106%; }
 .panel-head .close { grid-column: 2; grid-row: 1; }
+.panel-head.for-incident h2 { font-size: 22px; line-height: 28px; font-stretch: 100%; }
+
+.incident-body { display: grid; gap: 4px; }
+.panel .note { display: grid; gap: 4px; border-left: 2px solid #c5d0cb; padding-left: 12px; }
 
 .panel section { display: grid; gap: 8px; }
 .panel h3 { font-size: 16px; line-height: 24px; font-weight: 600; }
@@ -435,6 +441,19 @@ input[type="search"] { width: 12rem; }
   .panel-open { overflow: hidden; }
   h1 { font-size: 28px; line-height: 32px; }
   .matrix .name button { max-width: 8rem; }
+}
+
+/* Touch screens: each Facebook post number is a target a thumb can hit. */
+
+@media (pointer: coarse) {
+  .post-links .sep { display: none; }
+  .post-links a {
+    display: inline-block;
+    min-width: 28px;
+    line-height: 28px;
+    margin: 2px 4px 2px 0;
+    text-align: center;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

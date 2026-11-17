@@ -6,6 +6,7 @@ Read this first, then `docs/project-context.md` (what the project is and its rul
 
 - **Data.** The current export is `data/export/archive_export-v2.1.json` (608 incidents, 716 entities). It is a relabel-only update of v2, checked: the same incident IDs and post lists, three new categories, `broadcast_blackout` renamed to `broadcast_coverage`, and duplicate entities merged. Spelling variants of the same person (for example Tarafdar Ruhul Amin and Tarafder Md Ruhul Amin) were still left apart, so `scripts/entity_aliases.json` maps them to one name at build time. The owner confirmed that "Ibrahim" is the winger Mohammad Ibrahim, that Shahidul Alam and the goalkeeper "Sohel" are Shahidul Alam Sohel, that Sohel Rana (senior) and Md. Sohel Rana (junior) are two different players, that "Faisal" stays on its own, that the two Christian goalkeeping-coach spellings are one person, and that Minhazul Islam is Minhazul Islam Minhaz. Samad Yousuf is merged into Samad Yusuf on the owner's word that they are probably the same player. Other first-name-only entries are not merged. v1 and v2 are kept for comparison. The raw Facebook pages in `data/raw/` are not in git.
 - **Web view.** Done and working: a category matrix (main view), an entity side panel, a co-appearance network, and a searchable incident list. Every number clicks through to incidents and then to Facebook posts.
+- **Incident pages.** Done, awaiting owner review. Every incident title links to `#incident/<incident_id>`, shown in the side panel with a related-incidents list (rule in `docs/design.md`). The hash names only the incident, so the view behind it travels in `history.state`; a link opened fresh shows the incident list behind it. The incident search also matches the names in each incident, not only the title and summary.
 - **Owner feedback so far.** The owner wants it minimal, with nothing flashy and no "AI slop" look. The name dropdown and label overlaps were fixed after the owner's review. The header now carries a Bangla and English allegation disclaimer, there is an About tab written in Bangla, and Contact opens a message to aayan.deb@outlook.com. Hosting is Vercel, configured by `vercel.json` to serve `web/` with no build.
 
 ## How to run
@@ -31,16 +32,6 @@ Rebuild after any change to an export or to `scripts/build_web_data.py`. Never e
 - The network (`force-graph`, vendored in `web/vendor/`) only advances on animation frames. In a hidden or background browser tab it stalls, and zoom-to-fit and resize don't run. That isn't a bug in the page; take a screenshot or bring the tab forward to make it render.
 - Python's plain `http.server` lets the browser cache `archive.js`, so stale data shows after a rebuild. Use `scripts/serve.py`.
 - Native `<datalist>` popups render in the wrong place in Cursor's embedded browser. The Find box uses a custom list (`bindFind` in `web/app.js`) for that reason.
-
-## Next task: incident pages
-
-Agreed with the owner in principle, not yet built. Keep it small:
-
-- Route `#incident/<incident_id>`, for example `#incident/INC-2021-12-007`. Make every incident title a link to it.
-- Show it in the existing side panel. Content: the date range, title, kinds, summary, named people as buttons that open their profile, Facebook post links, and the allegation note.
-- Add a "Related incidents" list of up to 6: incidents sharing 2 or more named entities first, then the same kind within 90 days. Leave out the Bangladesh Football Federation and the national team when counting shared names, because they are in almost everything.
-- No new visual elements. Reuse `renderIncident`, the panel styles, and the filter-button style.
-- Update `route()` in `web/app.js` for the new hash form, and keep the back button working.
 
 ## Later, only if the owner asks
 

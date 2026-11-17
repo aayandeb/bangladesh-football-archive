@@ -19,6 +19,13 @@
 
   const bySlug = new Map(ENTS.map((e, i) => [e.slug, i]));
   const hubs = new Set(HUB_SLUGS.map((s) => bySlug.get(s)).filter((i) => i !== undefined));
+  const byIncidentId = new Map(INCS.map((inc, n) => [inc.id, n]));
+  // What the incident search looks through: the title, the summary, and every name in the incident.
+  const SEARCH_TEXT = INCS.map((inc) =>
+    [inc.title, inc.summary, ...inc.ents.map((e) => ENTS[e].label)].join(" ").toLowerCase());
+  const NOTE =
+    `<p lang="bn">এখানে কোনো অভিযোগের সত্যতা যাচাই করা হয়নি।</p>` +
+    `<p>These are fan allegations, not independently verified findings. Names and mention counts show who appeared in discussions, not who was responsible.</p>`;
   const neighbours = ENTS.map(() => []);
   for (const [a, b, ns] of A.links) {
     neighbours[a].push([b, ns]);
@@ -31,6 +38,8 @@
     minKinds: 3,
     sort: "count",
     entity: null,
+    incident: null,
+    back: null,
     panelCat: null,
     panelWith: null,
     minShared: 3,
@@ -191,18 +200,25 @@
 
   // Shared incident rendering
 
+  // The commas are their own elements so the touch layout can drop them
+  // and give each number a target a thumb can hit.
+  function postLinks(inc) {
+    const links = inc.posts
+      .map((url, k) => `<a href="${esc(url)}" target="_blank" rel="noopener" aria-label="Facebook post ${k + 1} of ${inc.posts.length}">${k + 1}</a>`)
+      .join(`<span class="sep">, </span>`);
+    return `<span class="post-links">${links}</span>`;
+  }
+
   function renderIncident(n, current) {
     const inc = INCS[n];
     const kinds = inc.cats.map((c) => CATS[c].label).join(", ");
     const names = inc.ents
       .map((e) => (e === current ? esc(ENTS[e].label) : `<button type="button" data-open="${e}">${esc(ENTS[e].label)}</button>`))
       .join(", ");
-    const posts = inc.posts
-      .map((url, k) => `<a href="${esc(url)}" target="_blank" rel="noopener" aria-label="Facebook post ${k + 1} of ${inc.posts.length}">${k + 1}</a>`)
-      .join(", ");
+    const posts = postLinks(inc);
     return `<article class="incident">
       <p class="small quiet">${formatRange(inc.start, inc.end)}</p>
-      <h3>${esc(inc.title)}</h3>
+      <h3><a href="#incident/${esc(inc.id)}" data-incident="${n}">${esc(inc.title)}</a></h3>
       <p>${esc(inc.summary)}</p>
       <p class="facts small">${esc(kinds)}.${names ? ` Named: ${names}.` : ""}</p>
       <p class="posts small">Facebook ${inc.posts.length === 1 ? "post" : "posts"}: ${posts}</p>
@@ -213,6 +229,8 @@
 
   function openEntity(i, { cat = null, withEnt = null } = {}) {
     state.entity = i;
+    state.incident = null;
+    state.back = null;
     state.panelCat = cat;
     state.panelWith = withEnt;
     const hash = `${state.view}/${ENTS[i].slug}`;
@@ -221,12 +239,28 @@
     redrawGraph();
   }
 
-  function closeEntity() {
+  function hidePanel() {
     state.entity = null;
+    state.incident = null;
     $("#panel").hidden = true;
     document.body.classList.remove("panel-open");
+  }
+
+  function closePanel() {
+    hidePanel();
+    state.back = null;
     if (location.hash.slice(1) !== state.view) history.pushState(null, "", `#${state.view}`);
     redrawGraph();
+  }
+
+  function showPanel(focus) {
+    const panel = $("#panel");
+    panel.hidden = false;
+    document.body.classList.add("panel-open");
+    if (focus) {
+      panel.scrollTop = 0;
+      $("#panel-name").focus({ preventScroll: true });
+    }
   }
 
   function strip(e) {
@@ -307,12 +341,89 @@
         <div class="incidents">${shown.map((n) => renderIncident(n, i)).join("")}</div>
       </section>`;
 
-    panel.hidden = false;
-    document.body.classList.add("panel-open");
-    if (focus) {
-      panel.scrollTop = 0;
-      $("#panel-name").focus({ preventScroll: true });
+    showPanel(focus);
+  }
+
+  // Incident page
+
+  // Remembers the open name, its filters and the scroll position, so the
+  // back button returns from an incident to the same place in the list.
+  function leaveEntity() {
+    if (state.entity === null) return;
+    state.back = { entity: state.entity, cat: state.panelCat, withEnt: state.panelWith, scroll: $("#panel").scrollTop };
+    state.entity = null;
+  }
+
+  function openIncident(n) {
+    leaveEntity();
+    state.incident = n;
+    const hash = `incident/${INCS[n].id}`;
+    if (location.hash.slice(1) !== hash) history.pushState({ view: state.view }, "", `#${hash}`);
+    renderIncidentPanel(true);
+    redrawGraph();
+  }
+
+  const dayOf = (iso) => {
+    const [y, m, d] = iso.split("-").map(Number);
+    return Date.UTC(y, m - 1, d) / 864e5;
+  };
+
+  // Up to 6: incidents sharing two or more names first, then incidents of
+  // the same kind within 90 days. The federation and the national team are
+  // in almost everything, so they don't count as shared names, and Other
+  // doesn't count as a shared kind.
+  function relatedIncidents(n) {
+    const inc = INCS[n];
+    const gap = (m) => Math.max(0, dayOf(INCS[m].start) - dayOf(inc.end), dayOf(inc.start) - dayOf(INCS[m].end));
+    const shared = new Map();
+    for (const e of inc.ents) {
+      if (hubs.has(e)) continue;
+      for (const m of ENTS[e].incidents) if (m !== n) shared.set(m, (shared.get(m) || 0) + 1);
     }
+    const byNames = [...shared]
+      .filter(([, k]) => k >= 2)
+      .sort((a, b) => b[1] - a[1] || gap(a[0]) - gap(b[0]))
+      .map(([m]) => m);
+    const taken = new Set(byNames);
+    const byKind = INCS.map((_, m) => m)
+      .filter((m) => m !== n && !taken.has(m) && gap(m) <= 90 && INCS[m].cats.some((c) => c !== OTHER && inc.cats.includes(c)))
+      .sort((a, b) => gap(a) - gap(b));
+    return byNames.concat(byKind).slice(0, 6);
+  }
+
+  function renderIncidentPanel(focus) {
+    const n = state.incident;
+    const inc = INCS[n];
+    const related = relatedIncidents(n);
+    const posts = postLinks(inc);
+
+    $("#panel").innerHTML = `
+      <div class="panel-head for-incident">
+        <h2 id="panel-name" tabindex="-1">${esc(inc.title)}</h2>
+        <button type="button" class="close" data-close>Close</button>
+        <p class="quiet">${formatRange(inc.start, inc.end)}</p>
+      </div>
+      <div class="incident-body">
+        <p>${esc(inc.summary)}</p>
+        <p class="small quiet">${esc(inc.cats.map((c) => CATS[c].label).join(", "))}.</p>
+      </div>
+      ${inc.ents.length ? `<section>
+        <h3>Named in this incident</h3>
+        <div class="filters">${inc.ents
+          .map((e) => `<button type="button" class="filter" data-open="${e}">${esc(ENTS[e].label)}</button>`)
+          .join("")}</div>
+      </section>` : ""}
+      <section>
+        <p>Facebook ${inc.posts.length === 1 ? "post" : "posts"}: ${posts}</p>
+        <div class="note small quiet">${NOTE}</div>
+      </section>
+      ${related.length ? `<section>
+        <h3>Related incidents</h3>
+        <p class="small quiet">Incidents that share two or more names with this one, then incidents of the same kind within 90 days.</p>
+        <div class="incidents">${related.map((m) => renderIncident(m, null)).join("")}</div>
+      </section>` : ""}`;
+
+    showPanel(focus);
   }
 
   function bindPanel() {
@@ -320,14 +431,22 @@
     panel.addEventListener("click", (ev) => {
       const t = ev.target.closest("button");
       if (!t) return;
-      if (t.dataset.close !== undefined) closeEntity();
+      if (t.dataset.close !== undefined) closePanel();
       else if (t.dataset.clear !== undefined) { state.panelCat = null; state.panelWith = null; renderPanel(); }
       else if (t.dataset.cat !== undefined) { state.panelCat = state.panelCat === +t.dataset.cat ? null : +t.dataset.cat; renderPanel(); }
       else if (t.dataset.with !== undefined) { state.panelWith = state.panelWith === +t.dataset.with ? null : +t.dataset.with; renderPanel(); }
       else if (t.dataset.open !== undefined) openEntity(+t.dataset.open);
     });
     document.addEventListener("keydown", (ev) => {
-      if (ev.key === "Escape" && state.entity !== null) closeEntity();
+      if (ev.key === "Escape" && !$("#panel").hidden) closePanel();
+    });
+    // Incident titles are real links, so they can be opened in a new tab.
+    // A plain click opens the incident in the panel and moves focus to it.
+    document.addEventListener("click", (ev) => {
+      const a = ev.target.closest("a[data-incident]");
+      if (!a || ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+      ev.preventDefault();
+      openIncident(+a.dataset.incident);
     });
   }
 
@@ -642,18 +761,18 @@
 
   // Incidents view
 
-  function incidentMatches(inc) {
+  function incidentMatches(n) {
+    const inc = INCS[n];
     if (state.incCat !== "" && !inc.cats.includes(+state.incCat)) return false;
     if (state.incYear !== "" && !inc.start.startsWith(state.incYear)) return false;
     if (state.q) {
-      const hay = `${inc.title} ${inc.summary}`.toLowerCase();
-      if (!state.q.split(/\s+/).every((w) => hay.includes(w))) return false;
+      if (!state.q.split(/\s+/).every((w) => SEARCH_TEXT[n].includes(w))) return false;
     }
     return true;
   }
 
   function renderIncidents() {
-    const list = INCS.map((inc, n) => n).filter((n) => incidentMatches(INCS[n])).reverse();
+    const list = INCS.map((inc, n) => n).filter(incidentMatches).reverse();
     const filtered = state.q || state.incCat !== "" || state.incYear !== "";
     $("#inc-heading").textContent = filtered
       ? `${plural(list.length, "incident", "incidents")} of ${INCS.length.toLocaleString("en")}`
@@ -696,21 +815,41 @@
     if (view === "connections" && !graph) initGraph();
   }
 
+  let routed = false;
+
   function route() {
     const [view, slug] = location.hash.slice(1).split("/");
+    const first = !routed;
+    routed = true;
+
+    if (view === "incident" && byIncidentId.has(slug)) {
+      // The hash names only the incident. The view behind it travels in the
+      // history entry, and a link opened fresh shows the incident list.
+      const behind = history.state && history.state.view;
+      showView(VIEWS.includes(behind) ? behind : first ? "incidents" : state.view);
+      leaveEntity();
+      state.incident = byIncidentId.get(slug);
+      renderIncidentPanel(false);
+      if (first) $("#panel").scrollTop = 0;
+      redrawGraph();
+      return;
+    }
+
     showView(VIEWS.includes(view) ? view : "categories");
     const i = slug ? bySlug.get(slug) : undefined;
     if (i !== undefined) {
+      const back = state.back && state.back.entity === i ? state.back : null;
       if (i !== state.entity) {
         state.entity = i;
-        state.panelCat = null;
-        state.panelWith = null;
+        state.panelCat = back ? back.cat : null;
+        state.panelWith = back ? back.withEnt : null;
       }
+      state.incident = null;
+      state.back = null;
       renderPanel(false);
-    } else if (state.entity !== null) {
-      state.entity = null;
-      $("#panel").hidden = true;
-      document.body.classList.remove("panel-open");
+      if (back) $("#panel").scrollTop = back.scroll;
+    } else if (!$("#panel").hidden) {
+      hidePanel();
     }
     redrawGraph();
   }
@@ -718,8 +857,13 @@
   for (const a of document.querySelectorAll(".tabs a")) {
     a.addEventListener("click", (ev) => {
       ev.preventDefault();
-      const slug = state.entity !== null ? `/${ENTS[state.entity].slug}` : "";
-      history.pushState(null, "", `#${a.dataset.view}${slug}`);
+      if (state.incident !== null) {
+        // An open incident stays open across tabs, as an open name does.
+        history.pushState({ view: a.dataset.view }, "", location.hash);
+      } else {
+        const slug = state.entity !== null ? `/${ENTS[state.entity].slug}` : "";
+        history.pushState(null, "", `#${a.dataset.view}${slug}`);
+      }
       route();
     });
   }

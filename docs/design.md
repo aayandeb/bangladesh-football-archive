@@ -39,6 +39,7 @@ The width axis does the work a second typeface would:
 |---|---|---|---|
 | Page title | 32 / 38 | 600 | 112% |
 | Entity name in the panel | 28 / 32 | 600 | 106% |
+| Incident title in the panel | 22 / 28 | 600 | 100% |
 | Section heading | 18 / 24 | 600 | 100% |
 | Body and summaries | 16 / 24 | 400 | 100% |
 | Small text: dates, counts, notes | 13 / 18 | 400 | 100% |
@@ -96,7 +97,8 @@ The entity panel opens on the right as a 30rem column and pushes the main view t
 - **Filter buttons.** Text in a 1px Line outline. The selected button is Ink with Paper text. Square corners at 2px radius. All controls share the same height (32px).
 - **Matrix cell.** A 20px square with a 2px gap and no border. Empty cells are a small Line dot, so the grid stays readable without rules. Category groups are separated by a 10px gap instead of group labels. Hover or focus outlines the cell in Ink and shows the count and category in a single status line under the controls, not a floating tooltip. The Other column is drawn at reduced opacity.
 - **Incident.** No box, no card. Date in Quiet, title in body weight 600, summary, then one Quiet line with categories and names. Incidents are separated by space (24px), not lines.
-- **Links.** Ink, underlined with a 1px underline offset by 3px. Facebook links read "Facebook posts: 1, 2, 3", each with an accessible label such as "Facebook post 2 of 3", and open in a new tab.
+- **Incident page.** One incident, shown in the entity panel at `#incident/<id>`. Every incident title links to it. In a list the title keeps its weight and takes a Line underline that turns Ink on hover, the same as the names under it, so fifty titles in a row stay calm. Top to bottom: the title with Close, the date in Quiet, the summary, a Quiet line of kinds, the named names as filter buttons that open their profile, the Facebook post links, the allegation note with the same Line rule on its left as the header disclaimer, and up to 6 related incidents. Related incidents are those sharing 2 or more names (not counting the federation or the national team), then those of the same kind within 90 days. One Quiet sentence under the heading states that rule, so the list doesn't read as a claim that the incidents are linked.
+- **Links.** Ink, underlined with a 1px underline offset by 3px. Facebook links read "Facebook posts: 1, 2, 3", each with an accessible label such as "Facebook post 2 of 3", and open in a new tab. On touch screens the commas are dropped and each number becomes a 28px-square target with a 4px gap, so a thumb can hit one post out of forty. With a mouse the line is unchanged.
 - **Network.** People are filled Field circles. Teams are filled Quiet circles. Organisations and tournaments are Quiet outlined circles. Circle size follows the number of kinds an entity spans. Links are faint Quiet lines, with thickness following shared incidents. Defaults: at least 3 shared incidents, with the federation and national team hidden. Only the 14 names spanning the most kinds are labelled until you zoom in. Hovering or selecting a name fades everything else and labels it plus its 10 strongest connections. Labels are drawn after all circles, with a Paper halo, so nothing covers them.
 
 ## Motion
