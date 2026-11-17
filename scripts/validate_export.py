@@ -17,7 +17,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_EXPORT = ROOT / "data" / "export" / "archive_export-v2.1.json"
+DEFAULT_EXPORT = ROOT / "data" / "export" / "archive_export-v3.json"
 
 _NAME_NOISE = re.compile(r"\b(the|fc|sc|ks|club|limited|ltd)\b")
 

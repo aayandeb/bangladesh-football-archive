@@ -57,7 +57,7 @@ The page is one centered column, at most 1440px wide, with 72px of side padding 
 Bangladesh Football Archive                              Contact
 What this is, in English.              | Reading this archive
 The same, in Bangla.                   | Allegations, not findings.
-608 incidents · 3,397 source posts · 24,370 posts analyzed     v2.1 · Updated 16 November 2026
+1,039 incidents · 8,080 source posts · 40,118 posts analyzed     v3 · Updated 17 November 2026
 
 Categories    Connections    Incidents    About   (text tabs, the current one underlined)
 
@@ -74,10 +74,10 @@ The entity panel opens on the right as a 30rem column and pushes the main view t
 ```
                                      | Kazi Salahuddin                 Close
                                      | Person
-                                     | Named in 83 incidents across 11
-                                     | kinds, 2014 to 2021.
+                                     | Named in 121 incidents across 14
+                                     | kinds, from 2015 to 2025.
                                      |
-                                     | 2014 ||| |  ||||| || |||  2021   (ticks)
+                                     | 2014 ||| |  ||||| || |||  2025   (ticks)
                                      |
                                      | Kinds        Federation politics 23
                                      |              Corruption, finance  9 ...
@@ -114,7 +114,8 @@ The entity panel opens on the right as a 30rem column and pushes the main view t
 - Counts are sentences or plain labels, not slogans: "Named in 30 incidents across 12 kinds", not "30 INCIDENTS".
 - Remove classifier notes such as "Suggested new category: …" from summaries before display.
 - Empty states say what to change: "No one spans 6 or more kinds with this filter. Lower the number to see more."
-- The header copy is the owner's. The English introduction and the Bangla introduction stay on the left. "Reading this archive" is the only verification note, on the right, so the warning is not said twice in English. The line under them is "608 incidents · 3,397 source posts · 24,370 posts analyzed" on the left and "v2.1 · Updated 16 November 2026" on the right, with the numbers and date filled from the export. The disclaimer has a Line rule on its left, no background and no accent colour.
+- The header copy is the owner's. The English introduction and the Bangla introduction stay on the left. "Reading this archive" is the only verification note, on the right, so the warning is not said twice in English. The line under them is "1,039 incidents · 8,080 source posts · 40,118 posts analyzed" on the left and "v3 · Updated 17 November 2026" on the right, with the numbers and date filled from the export. The title and both introductions name the export's years, currently 2014–2025. The disclaimer has a Line rule on its left, no background and no accent colour.
+- The strip in the entity panel runs from the export's first date to its last. Each year after the start year gets a mark and its full year.
 - The About tab is the owner's Bangla text. It states the aim, the Facebook source, how incidents were gathered, and the syndicate question as a question for the reader. It does not conclude that a syndicate exists.
 - One Contact link, in the header, uses the filter-button style. It opens a message to aayan.deb@outlook.com.
 

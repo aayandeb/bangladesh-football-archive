@@ -29,9 +29,18 @@ These findings from the v2 export drive the choices below. v1 figures are given 
 6. **Edges carry no relation type.** Every edge is "appears with" plus a list of incident IDs. The useful edge attributes are the number of shared incidents and which categories those incidents fall in. Both are derived by the build script.
 7. **All 20 categories are now in use.** The three promoted categories have real counts in v2: `player_welfare_neglect` 31, `broadcast_blackout` 18, `foreign_player_naturalisation` 11. `other` is the largest category at 87 incidents, so a filter to hide it matters. The views keep all 20 categories in a fixed taxonomy order.
 
+## v3 export (17 November 2026)
+
+The web view now builds from `archive_export-v3.json`. Checked against v2.1 and against its own posts:
+
+- Every v2.1 incident ID is still present. 431 incidents are new, from the 2022–2025 posts. The window is 3 September 2014 to 31 December 2025: 1,039 incidents, 8,080 incident posts, 40,118 posts, 1,130 graph nodes.
+- `INC-2021-12-012` absorbed the January 2022 continuation and grew from 4 posts to 77. `INC-2022-01-001` is not a separate incident.
+- No broken references. 28 incidents name no one, so they stay in the list and out of the graph. Three name pairs are still unmerged: Club Eagles / Eagles FC, Dhaka Wanderers / Dhaka Wanderers Club, Mohammedan / Mohammedan SC.
+- The same 23 categories are in use. The strip and the header years follow this export's dates.
+
 ## v2.1 export (16 November 2026)
 
-The web view now builds from `archive_export-v2.1.json`. It is a relabel-only update of v2, checked against it:
+`archive_export-v2.1.json` is a relabel-only update of v2, checked against it:
 
 - Incident IDs, post lists, titles, and posts are identical to v2.
 - 55 incidents changed category. 18 moved from `broadcast_blackout` to `broadcast_coverage`, 37 left `other` (11 to `foreign_players_domestic`, 9 to `development_neglect`, 8 to `club_mismanagement`, 6 to `broadcast_coverage`, 3 to `player_welfare_neglect`). `other` dropped from 87 to 50.

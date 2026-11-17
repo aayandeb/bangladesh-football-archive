@@ -37,6 +37,14 @@ ROOT = Path(__file__).resolve().parent.parent
 APART = [
     ("asean", "asian"),
     ("jahan", "johan"),
+    ("akmal", "akmol"),
+    ("belal", "bilal"),
+    ("haaland", "holland"),
+    ("helal", "hilal"),
+    ("kieran", "kiran"),
+    ("kieran", "kiron"),
+    ("mintoo", "mintu"),
+    ("shahedul", "shahidul"),
 ]
 
 MIN_LENGTH = 5

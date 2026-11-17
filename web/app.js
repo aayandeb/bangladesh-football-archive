@@ -263,14 +263,21 @@
   }
 
   function strip(e) {
-    const start = Date.UTC(2014, 8, 1), end = Date.UTC(2022, 0, 1);
+    const [startIso, endIso] = A.meta.date_range;
+    const [ys, ms, ds] = startIso.split("-").map(Number);
+    const [ye, me, de] = endIso.split("-").map(Number);
+    const start = Date.UTC(ys, ms - 1, ds);
+    const end = Date.UTC(ye, me - 1, de);
+    const span = end - start || 1;
     const x = (iso) => {
       const [y, m, d] = iso.split("-").map(Number);
-      return 4 + ((Date.UTC(y, m - 1, d) - start) / (end - start)) * 392;
+      const t = Math.min(end, Math.max(start, Date.UTC(y, m - 1, d)));
+      return 4 + ((t - start) / span) * 392;
     };
-    let svg = `<svg class="strip" viewBox="0 0 400 44" preserveAspectRatio="none" role="img" aria-label="When these incidents happened, September 2014 to December 2021">`;
+    const when = `${MONTHS_FULL[ms - 1]} ${ys} to ${MONTHS_FULL[me - 1]} ${ye}`;
+    let svg = `<svg class="strip" viewBox="0 0 400 44" preserveAspectRatio="none" role="img" aria-label="When these incidents happened, ${when}">`;
     svg += `<line class="axis" x1="4" x2="396" y1="24.5" y2="24.5"/>`;
-    for (let y = 2015; y <= 2021; y++) {
+    for (let y = ys + 1; y <= ye; y++) {
       const px = x(`${y}-01-01`);
       svg += `<line class="axis" x1="${px}" x2="${px}" y1="24" y2="28"/><text x="${px}" y="40" text-anchor="middle">${y}</text>`;
     }

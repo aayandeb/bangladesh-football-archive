@@ -1,6 +1,6 @@
 # Bangladesh Football Archive
 
-An archive of controversies in Bangladesh football (September 2014 – December 2021), built from the public fan group *Bangladesh Football – Walking Around The Dreams*. Every incident stays linked to the Facebook posts behind it. Claims in the archive are fan allegations, recorded with their sources, not established facts.
+An archive of controversies in Bangladesh football (September 2014 – December 2025), built from the public fan group *Bangladesh Football – Walking Around The Dreams*. Every incident stays linked to the Facebook posts behind it. Claims in the archive are fan allegations, recorded with their sources, not established facts.
 
 Agents picking up the work: start with [`AGENTS.md`](AGENTS.md). Everyone: read [`docs/project-context.md`](docs/project-context.md) first. It covers the purpose, method, taxonomy, current status, and what is on hold.
 
@@ -11,7 +11,7 @@ python3 scripts/build_web_data.py   # validate the export and rebuild web/data/a
 python3 scripts/serve.py            # then open http://localhost:8000
 ```
 
-Opening `web/index.html` directly from disk also works. The build defaults to the v2.1 export; pass another export path to build from it instead. Before changing anything under `web/`, read [`docs/design.md`](docs/design.md).
+Opening `web/index.html` directly from disk also works. The build defaults to the v3 export; pass another export path to build from it instead. Before changing anything under `web/`, read [`docs/design.md`](docs/design.md).
 
 ## Publishing
 
@@ -21,7 +21,8 @@ Opening `web/index.html` directly from disk also works. The build defaults to th
 
 ```
 data/
-  export/archive_export-v2.1.json  Current data product: v2 with promoted categories and merged duplicate entities
+  export/archive_export-v3.json    Current data product: v2.1 plus 2022–2025 incidents (1,039 incidents)
+  export/archive_export-v2.1.json  v2 with promoted categories and merged duplicate entities (608 incidents)
   export/archive_export-v2.json    v2 looser re-clustering (608 incidents)
   export/archive_export.json       v1 baseline (273 incidents), same format
   raw/sweep-posts/               Raw Facebook API pages by year/month (not in git; backed up to Google Drive)
