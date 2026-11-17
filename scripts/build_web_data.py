@@ -6,6 +6,10 @@ The output is a plain script that sets window.ARCHIVE, so web/index.html also
 works when opened straight from disk. The graph is recomputed from incidents
 after applying scripts/entity_aliases.json; the export's own graph block is
 only used for entity types.
+
+Two things are added for the search only: each entity's other spellings from
+entity_aliases.json ("aka"), and the groups of names the archive spells more
+than one way ("spellings", see scripts/search_spellings.py).
 """
 
 import itertools
@@ -15,6 +19,7 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
+from search_spellings import spelling_groups
 from validate_export import DEFAULT_EXPORT, ROOT, validate
 
 OUT = ROOT / "web" / "data" / "archive.js"
@@ -140,9 +145,16 @@ def main():
         for a, b in itertools.combinations(inc["ents"], 2):
             pair_incidents[(a, b)].append(n)
 
+    aka = defaultdict(list)
+    for name, label in aliases.items():
+        if label in ent_index and name != label:
+            aka[ent_index[label]].append(name)
+
     other = cat_index["other"]
     slugs = Counter()
     for e, ent in enumerate(entities):
+        if aka[e]:
+            ent["aka"] = sorted(aka[e])
         cat_counts = Counter(c for n in ent_incidents[e] for c in incidents[n]["cats"])
         slugs[ent["slug"]] += 1
         if slugs[ent["slug"]] > 1:
@@ -152,6 +164,11 @@ def main():
         ent["kinds"] = sum(1 for c in cat_counts if c != other)
 
     links = [[a, b, ns] for (a, b), ns in sorted(pair_incidents.items())]
+
+    spellings = spelling_groups(
+        [text for inc in incidents for text in (inc["title"], inc["summary"])],
+        [ent["label"] for ent in entities] + list(aliases),
+    )
 
     data = {
         "meta": {
@@ -168,6 +185,7 @@ def main():
         "entities": entities,
         "incidents": incidents,
         "links": links,
+        "spellings": spellings,
     }
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
@@ -176,7 +194,7 @@ def main():
     print(
         f"Wrote {OUT.relative_to(ROOT)} ({OUT.stat().st_size / 1024:.0f} KB): "
         f"{len(incidents)} incidents, {len(entities)} entities, {len(links)} links, "
-        f"{len(warnings)} warnings"
+        f"{len(spellings)} spelling groups, {len(warnings)} warnings"
     )
 
 

@@ -20,9 +20,8 @@
   const bySlug = new Map(ENTS.map((e, i) => [e.slug, i]));
   const hubs = new Set(HUB_SLUGS.map((s) => bySlug.get(s)).filter((i) => i !== undefined));
   const byIncidentId = new Map(INCS.map((inc, n) => [inc.id, n]));
-  // What the incident search looks through: the title, the summary, and every name in the incident.
-  const SEARCH_TEXT = INCS.map((inc) =>
-    [inc.title, inc.summary, ...inc.ents.map((e) => ENTS[e].label)].join(" ").toLowerCase());
+  // The forgiving search in search.js, used by the incident search and the Find boxes.
+  const SEARCH = window.ArchiveSearch.build(A);
   const NOTE =
     `<p lang="bn">এখানে কোনো অভিযোগের সত্যতা যাচাই করা হয়নি।</p>` +
     `<p>These are fan allegations, not independently verified findings. Names and mention counts show who appeared in discussions, not who was responsible.</p>`;
@@ -711,13 +710,8 @@
     };
 
     input.addEventListener("input", () => {
-      const q = input.value.trim().toLowerCase();
-      if (!q) return close();
-      const starts = (i) => ENTS[i].label.toLowerCase().startsWith(q);
-      items = candidates()
-        .filter((i) => ENTS[i].label.toLowerCase().includes(q))
-        .sort((a, b) => starts(b) - starts(a) || ENTS[b].kinds - ENTS[a].kinds || ENTS[a].label.localeCompare(ENTS[b].label))
-        .slice(0, 8);
+      if (!input.value.trim()) return close();
+      items = SEARCH.names(input.value, candidates()).slice(0, 8);
       active = items.length ? 0 : -1;
       render();
     });
@@ -761,25 +755,45 @@
 
   // Incidents view
 
-  function incidentMatches(n) {
+  function inKindAndYear(n) {
     const inc = INCS[n];
     if (state.incCat !== "" && !inc.cats.includes(+state.incCat)) return false;
     if (state.incYear !== "" && !inc.start.startsWith(state.incYear)) return false;
-    if (state.q) {
-      if (!state.q.split(/\s+/).every((w) => SEARCH_TEXT[n].includes(w))) return false;
-    }
     return true;
   }
 
+  // Says so whenever the list shows a spelling other than the one typed.
+  function searchNote(found) {
+    const notes = [];
+    for (const c of found.closest) {
+      notes.push(`Nothing matches "${c.typed}". Showing the closest ${c.shown.length === 1 ? "spelling" : "spellings"}: ${c.shown.join(", ")}.`);
+    }
+    if (found.also.length) {
+      notes.push(`Also showing ${found.also.length === 1 ? "another spelling" : "other spellings"} used in the archive: ${found.also.join(", ")}.`);
+    }
+    if (found.partial) notes.push("No incident has all of these words. Showing those with the most.");
+    return notes.join(" ");
+  }
+
   function renderIncidents() {
-    const list = INCS.map((inc, n) => n).filter(incidentMatches).reverse();
-    const filtered = state.q || state.incCat !== "" || state.incYear !== "";
+    // With a search the list is best match first. Without one it is newest first.
+    const found = SEARCH.incidents(state.q);
+    const list = (found ? found.order : INCS.map((inc, n) => n).reverse()).filter(inKindAndYear);
+    const filtered = found || state.incCat !== "" || state.incYear !== "";
     $("#inc-heading").textContent = filtered
-      ? `${plural(list.length, "incident", "incidents")} of ${INCS.length.toLocaleString("en")}`
+      ? `${plural(list.length, "incident", "incidents")} of ${INCS.length.toLocaleString("en")}${found && list.length > 1 ? ", best match first" : ""}`
       : `All ${INCS.length.toLocaleString("en")} incidents, newest first`;
+
+    const note = found && list.length ? searchNote(found) : "";
+    $("#inc-status").textContent = note;
+    $("#inc-status").hidden = !note;
+
+    const bangla = /[\u0980-\u09ff]/.test(state.q);
     $("#inc-list").innerHTML = list.length
       ? list.slice(0, state.limit).map((n) => renderIncident(n, null)).join("")
-      : `<p class="empty quiet">No incidents match. Clear the search or choose another kind or year.</p>`;
+      : `<p class="empty quiet">${bangla
+        ? "Titles and summaries are in English, so a search in Bangla finds nothing yet. Try the name or subject in English letters."
+        : "No incidents match. Check the spelling, or clear the search and choose another kind or year."}</p>`;
     const more = $("#inc-more");
     const left = list.length - state.limit;
     more.hidden = left <= 0;
@@ -793,7 +807,7 @@
     const years = [...new Set(INCS.map((i) => i.start.slice(0, 4)))].sort();
     for (const y of years) year.add(new Option(y, y));
     const reset = () => { state.limit = 50; renderIncidents(); };
-    $("#inc-q").addEventListener("input", (ev) => { state.q = ev.target.value.trim().toLowerCase(); reset(); });
+    $("#inc-q").addEventListener("input", (ev) => { state.q = ev.target.value.trim(); reset(); });
     cat.addEventListener("change", () => { state.incCat = cat.value; reset(); });
     year.addEventListener("change", () => { state.incYear = year.value; reset(); });
     $("#inc-more").addEventListener("click", () => { state.limit += 50; renderIncidents(); });

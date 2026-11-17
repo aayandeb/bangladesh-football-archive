@@ -120,6 +120,7 @@
             <select id="inc-year"><option value="">All years</option></select>
           </label>
         </div>
+        <p class="status small quiet" id="inc-status" aria-live="polite" hidden></p>
         <div id="inc-list" class="incidents"></div>
         <button type="button" class="more" id="inc-more" hidden>Show 50 more</button>
       </section>
@@ -154,6 +155,7 @@
 
   <script src="vendor/force-graph.min.js"></script>
   <script src="data/archive.js"></script>
+  <script src="search.js"></script>
   <script src="app.js"></script>
   <script>
     (function () {
